@@ -530,10 +530,10 @@
     <div class="dot"></div>
     <span>实时更新</span>
   </div>
-  <div style="display:flex;gap:6px;align-items:center;">
-    <a href="/" style="font-size:11px;color:#8b6fd4;font-weight:600;text-decoration:none;padding:3px 8px;border-radius:20px;background:rgba(139,111,212,0.1);">04.08</a>
-    <a href="/apr7" style="font-size:11px;color:#9994a8;font-weight:600;text-decoration:none;padding:3px 8px;border-radius:20px;">04.07</a>
-  </div>
+  <select id="dateSelect" onchange="var v=this.value; if(v==='04.08') location.href='/'; else if(v==='apr7') location.href='/apr7';" style="font-size:11px;font-weight:600;color:#8b6fd4;background:rgba(139,111,212,0.1);border:1px solid rgba(139,111,212,0.3);border-radius:20px;padding:3px 24px 3px 10px;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22 viewBox=%220 0 10 6%22><path d=%22M1 1l4 4 4-4%22 stroke=%22%238b6fd4%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/></svg>');background-repeat:no-repeat;background-position:calc(100% - 8px) center;">
+    <option value="04.08" selected>04.08</option>
+    <option value="apr7">04.07</option>
+  </select>
 </header>
 
 <!-- Mobile sidebar overlay -->
