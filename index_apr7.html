@@ -525,14 +525,14 @@
   <div class="header-title">茶咖热点追踪看板</div>
   <div class="header-sub">by 曼拾</div>
   <div class="header-spacer"></div>
-  <div class="header-meta" id="dateLabel">2026.04.08</div>
+  <div class="header-meta" id="dateLabel">2026.04.07</div>
   <div class="tag-live">
     <div class="dot"></div>
     <span>实时更新</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center;">
-    <a href="/" style="font-size:11px;color:#8b6fd4;font-weight:600;text-decoration:none;padding:3px 8px;border-radius:20px;background:rgba(139,111,212,0.1);">04.08</a>
-    <a href="/apr7" style="font-size:11px;color:#9994a8;font-weight:600;text-decoration:none;padding:3px 8px;border-radius:20px;">04.07</a>
+    <a href="/" style="font-size:11px;color:#9994a8;font-weight:600;text-decoration:none;padding:3px 8px;border-radius:20px;">04.08</a>
+    <a href="/apr7" style="font-size:11px;color:#8b6fd4;font-weight:600;text-decoration:none;padding:3px 8px;border-radius:20px;background:rgba(139,111,212,0.1);">04.07</a>
   </div>
 </header>
 
@@ -615,9 +615,7 @@ const DATA = {
       { title: '宠物公益第四期', desc: '携手高校捐赠宠粮', date: '进行中' },
       { title: '轻舟来信', desc: '女孩运动力量主题公益', date: '进行中' },
     ],
-    new: [
-      { title: '自由女神小茉莉公仔', desc: '首个零售毛绒单品，周边商城限量发售', date: '03.31' },
-    ],
+    new: [],
   },
   chagi: {
     new: [
@@ -630,42 +628,45 @@ const DATA = {
   },
   xichi: {
     new: [
-      { title: 'Hello Kitty × 喜茶 2.0', desc: '全国上线！联名新品+包装+周边全套', date: '04.08' },
-      { title: '樱花芭乐白桃 / 芭乐粉', desc: '春季配色产品线', date: '04.08' },
+      { title: 'Hello Kitty × 喜茶 2.0', desc: '明日(4/8)全国上线', date: '04.08' },
     ],
     hot: [
-      { title: 'Hello Kitty 联名2.0', desc: '4/8起毛绒挂件/刺绣贴，4/11起口金包，4/10起主题门店', date: '04.08起' },
+      { title: 'Hello Kitty 联名2.0', desc: '明日(4/8)起联名毛绒挂件套餐，4/10起主题门店', date: '明日' },
     ],
   },
   starbucks: {
     new: [
       { title: '高蛋白拿铁PRO', desc: '20g原生乳蛋白，0乳糖牛乳', date: '04.07' },
+      { title: '巴西莓高蛋白拿铁PRO', desc: '莓果+意式浓缩+奇亚籽', date: '04.07' },
     ],
     hot: [],
   },
   chabado: {
     new: [
-      { title: '豆香系列', desc: '一抹青山豆、茉香花间豆，现磨豆浆+斑斓青团+东方茶底', date: '04.09' },
+      { title: '茶百道咖啡', desc: '100%阿拉比卡豆，6国6产区', date: '03.23' },
     ],
-    hot: [],
+    hot: [
+      { title: '咖啡免单活动', desc: '4/2-4/9，请喝30000杯', date: '进行中' },
+    ],
   },
   naixue: {
     new: [
       { title: '纤蓝莓系列', desc: '云南高原低GI蓝莓，自然甜', date: '04.01' },
+      { title: '莓美小紫瓶', desc: '云南高原低GI蓝莓+桑葚+草莓+鸭屎香茶底', date: '04.02' },
     ],
     hot: [],
   },
   coco: {
     hot: [
-      { title: '周三Co粉日', desc: '指定饮品五折', date: '每周三' },
+      { title: '九年腾格里沙漠植树', desc: '第九年生机流动公益', date: '进行中' },
     ],
     new: [
-      { title: '小青团系列', desc: '小青团推广中', date: '进行中' },
+      { title: '沙棘系列', desc: 'Color Walk 活动（4/4）', date: '进行中' },
     ],
   },
   yeye: {
     new: [
-      { title: '武汉元气蛋', desc: '×湖北省博物馆，凤凰奶·孝感米酒·双皮奶，荆楚风味', date: '04.06' },
+      { title: '武汉元气蛋', desc: '×湖北省博物馆，凤凰奶·孝感米酒·双皮奶，荆楚风味', date: '04.07' },
     ],
     hot: [
       { title: '× 湖北省博物馆', desc: '联名周边「金饭碗冰箱贴」', date: '进行中' },
@@ -681,13 +682,12 @@ const DATA = {
   lele: {
     new: [
       { title: '抹茶龙井糯糯', desc: '龙井茶 + 软糯Q弹奶麻薯', date: '03.27' },
-      { title: '橘子香柚龙井冰茶', desc: '春季新品', date: '03.26' },
     ],
     hot: [],
   },
   peets: {
     new: [
-      { title: '咖啡冰淇淋组合装', desc: '× 蒂兰圣雪', date: '04.02' },
+      { title: '爪哇卡尤马斯咖啡豆', desc: '印尼东爪哇家族农场，湿刨法', date: '03.30' },
     ],
     hot: [],
   },
@@ -701,21 +701,24 @@ const DATA = {
     hot: [
       { title: '× 浦美卢浮宫大展', desc: '联名托特包套餐¥75，全国上线', date: '03.30起' },
     ],
-    new: [],
+    new: [
+      { title: '滇红茶拿铁', desc: '云南红茶+咖啡绵延交织', date: '03.17' },
+    ],
   },
 };
 
+
 const HOT = [
-  { rank: 1, name: '喜茶',       tag: 'HelloKitty 2.0全国上线 · 全套联名登场', bar: 98 },
-  { rank: 2, name: '爷爷不泡茶', tag: '×湖北省博物馆「武汉元气蛋」新品上市', bar: 90 },
-  { rank: 3, name: '霸王茶姬',   tag: '龙井系列全国回归 · 早系列买一赠一', bar: 85 },
-  { rank: 4, name: '瑞幸咖啡',   tag: '轻椰茉莉拿铁上线 · 生椰5周年回归', bar: 80 },
-  { rank: 5, name: '茶百道',    tag: '豆香系列明日(4/9)上市 · 豆浆+青团新组合', bar: 72 },
-  { rank: 6, name: '星巴克',    tag: '高蛋白拿铁PRO上市',           bar: 68 },
+  { rank: 1, name: '霸王茶姬',   tag: '早系列买一赠一(4/7-10) · 龙井回归', bar: 95 },
+  { rank: 2, name: '星巴克',     tag: '高蛋白拿铁PRO上市', bar: 88 },
+  { rank: 3, name: '爷爷不泡茶', tag: '×湖北省博物馆「武汉元气蛋」新品', bar: 82 },
+  { rank: 4, name: '瑞幸咖啡',   tag: '生椰5周年 · 陶喆代言', bar: 78 },
+  { rank: 5, name: '库迪咖啡',  tag: '杨幂代言超大杯畅饮季', bar: 70 },
+  { rank: 6, name: '古茗',       tag: '小马宝莉第二弹 · 香草籽维也纳', bar: 65 },
 ];
 
 let current = null;
-const CURRENT_DATE = "2026.04.08";
+const CURRENT_DATE = "2026.04.07";
 
 // Mobile sidebar toggle
 function openMenu() {
@@ -775,7 +778,7 @@ function render(id) {
   let html = `
     <div class="brand-welcome">
       <h2>${brand.name}</h2>
-      <p>每日热点追踪 · 2026.04.08</p>
+      <p>每日热点追踪 · 2026.04.07</p>
     </div>
   `;
 
