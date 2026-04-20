@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>茶咖热点追踪看板 by 曼拾</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #f0ece8;
+      --surface: #faf9f7;
+      --surface2: #f5f3f0;
+      --border: #e0dbd5;
+      --accent: #8b6fd4;
+      --accent2: #7c6af7;
+      --text: #2a2835;
+      --text2: #6b6880;
+      --text3: #9994a8;
+      --new: #5eb8f3;
+      --hot: #e8825e;
+      --event: #9b6fd4;
+      --welfare: #4db88a;
+      --dim: #d4cfca;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'PingFang SC', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Header ── */
+    header {
+      height: 52px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(240,236,232,0.96);
+      backdrop-filter: blur(12px);
+    }
+
+    .menu-btn {
+      display: none;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .menu-btn:hover { background: var(--surface2); }
+    .menu-btn svg { display: block; width: 20px; height: 20px; color: var(--text); }
+
+    .header-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #8b6fd4, #6b4fba);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      color: white;
+      font-weight: 800;
+      font-family: 'SF Pro Display', serif;
+      letter-spacing: -0.5px;
+    }
+
+    .header-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+    }
+
+    .header-sub {
+      font-size: 12px;
+      color: var(--text3);
+      padding-left: 10px;
+      border-left: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .header-spacer { flex: 1; }
+
+    .header-meta {
+      font-size: 12px;
+      color: var(--text3);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .tag-live {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(139,111,212,0.1);
+      padding: 3px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ── Date Selector ── */
+    .date-select-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .date-select {
+      appearance: none;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 28px 4px 10px;
+      font-size: 12px;
+      color: var(--text);
+      cursor: pointer;
+      outline: none;
+      transition: all 0.15s;
+    }
+
+    .date-select:hover {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .date-select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--text3);
+      pointer-events: none;
+    }
+
+    /* ── Layout ── */
+    .layout {
+      display: flex;
+      height: calc(100vh - 52px);
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 180px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+      overflow-y: auto;
+      padding: 12px 8px;
+    }
+
+    .sidebar-section { margin-bottom: 16px; }
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text3);
+      padding: 0 8px;
+      margin-bottom: 6px;
+    }
+
+    .brand-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.1s;
+      gap: 6px;
+    }
+
+    .brand-item:hover { background: var(--surface2); }
+    .brand-item.active { background: rgba(139,111,212,0.12); }
+    .brand-item.active .brand-name { color: var(--accent); font-weight: 600; }
+
+    .brand-name { font-size: 13px; color: var(--text); }
+    .brand-rank {
+      font-size: 10px;
+      font-weight: 700;
+      color: white;
+      background: var(--accent);
+      padding: 1px 5px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+    }
+
+    .empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text3);
+      gap: 10px;
+    }
+    .empty-icon { font-size: 32px; opacity: 0.4; }
+    .empty-text { font-size: 13px; }
+
+    /* ── Brand Card ── */
+    .brand-card { display: none; }
+    .brand-card.show { display: block; }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .brand-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #8b6fd4, #6b4fba);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .brand-title { font-size: 17px; font-weight: 700; color: var(--text); }
+    .brand-sub { font-size: 12px; color: var(--text3); margin-top: 1px; }
+
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .label-new { background: rgba(94,184,243,0.15); color: var(--new); }
+    .label-hot { background: rgba(232,130,94,0.15); color: var(--hot); }
+    .label-event { background: rgba(155,111,212,0.15); color: var(--event); }
+    .label-welfare { background: rgba(77,184,138,0.15); color: var(--welfare); }
+
+    .item {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .item:last-child { border-bottom: none; padding-bottom: 0; }
+    .item:first-child { padding-top: 0; }
+
+    .item-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .item-desc {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .item-date {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--text3);
+      background: var(--surface2);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+
+    /* ── Right panel ── */
+    .right {
+      width: 230px;
+      flex-shrink: 0;
+      border-left: 1px solid var(--border);
+      background: var(--surface);
+      overflow-y: auto;
+      padding: 16px 14px;
+    }
+
+    .right-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text3);
+      margin-bottom: 12px;
+    }
+
+    .hot-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+
+    .hot-rank {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent);
+      width: 22px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .hot-brand { font-size: 13px; font-weight: 600; color: var(--text); }
+    .hot-tag { font-size: 11px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
+    .hot-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .hot-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; }
+
+    /* ── Mobile hot ── */
+    .hot-list-mobile { display: none; }
+
+    /* ── Overlay ── */
+    .sidebar-overlay { display: none; position: fixed; inset: 0; z-index: 150; background: rgba(0,0,0,0.3); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .menu-btn { display: flex; }
+      .sidebar {
+        position: fixed;
+        left: 0; top: 52px; bottom: 0;
+        z-index: 160;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        width: 220px;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .right { display: none; }
+      .hot-list-mobile {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 12px 16px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        -webkit-overflow-scrolling: touch;
+      }
+      .hot-card {
+        flex-shrink: 0;
+        width: 160px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+      }
+      .hot-card .hot-rank { font-size: 10px; font-weight: 800; color: var(--accent); }
+      .hot-card .hot-brand { font-size: 12px; font-weight: 600; margin-top: 3px; }
+      .hot-card .hot-tag { font-size: 10px; color: var(--text2); margin-top: 2px; line-height: 1.3; }
+      .main { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <div class="header-logo">M</div>
+  <div class="header-title">茶咖热点追踪看板</div>
+  <div class="header-sub">by 曼拾</div>
+  <div class="header-spacer"></div>
+  <div class="date-select-wrap">
+    <select class="date-select" id="dateSelect" onchange="var v=this.value; if(v==='04.20'||v==='apr19')location.href=v==='04.20'?'https://yifanli94.github.io/mantea-dashboard/':'https://yifanli94.github.io/mantea-dashboard/index_apr19.html'; else if(v==='apr17')location.reload(); else location.href='https://yifanli94.github.io/mantea-dashboard/index_'+v+'.html';">
+      <option value="04.20">04.20</option>
+      <option value="apr19">04.19</option>
+      <option value="apr18">04.18</option>
+      <option value="apr17" selected>04.17（今日）</option>
+      <option value="apr16">04.16</option>
+      <option value="apr9">04.09</option>
+      <option value="apr8">04.08</option>
+      <option value="apr7">04.07</option>
+    </select>
+  </div>
+  <div class="header-meta" id="dateLabel">2026.04.17</div>
+  <div class="tag-live">
+    <div class="dot"></div>
+    <span>实时更新</span>
+  </div>
+</header>
+
+<!-- Mobile sidebar overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="layout">
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">品牌</div>
+      <div id="brandList"></div>
+    </div>
+  </nav>
+
+  <main class="main" id="mainContent">
+    <div class="empty">
+      <div class="empty-icon">→</div>
+      <div class="empty-text">从左侧选择一个品牌查看动态</div>
+    </div>
+  </main>
+
+  <!-- Desktop right panel -->
+  <aside class="right hot-list-desktop">
+    <div class="right-title">今日热度</div>
+    <div id="hotList"></div>
+  </aside>
+
+  <!-- Mobile hot panel -->
+  <div class="hot-list-mobile" id="hotListMobile"></div>
+
+</div>
+
+<script>
+const BRANDS = [
+  { id: 'luckin',    name: '瑞幸咖啡',    rank: null },
+  { id: 'kudi',      name: '库迪咖啡',    rank: null },
+  { id: 'guming',    name: '古茗',        rank: null },
+  { id: 'molibaibai',name: '茉莉奶白',   rank: 1 },
+  { id: 'chagi',     name: '霸王茶姬',    rank: null },
+  { id: 'xichi',     name: '喜茶',        rank: null },
+  { id: 'starbucks', name: '星巴克',       rank: null },
+  { id: 'chabado',   name: '茶百道',      rank: 2 },
+  { id: 'naixue',    name: '奈雪的茶',    rank: null },
+  { id: 'coco',      name: 'CoCo',        rank: null },
+  { id: 'yeye',      name: '爷爷不泡茶',  rank: null },
+  { id: 'ahs',       name: '沪上阿姨',    rank: null },
+  { id: 'lele',      name: '乐乐茶',      rank: null },
+  { id: 'peets',     name: '皮爷咖啡',    rank: null },
+  { id: 'mstand',    name: 'M Stand',     rank: null },
+  { id: 'manner',    name: 'Manner',      rank: null },
+];
+
+const DATA = {
+  luckin: {
+    new: [
+      { title: '金烘系列', desc: 'IIAC最高奖项「铂金奖」，埃塞俄比亚产区100%阿拉比卡，日晒+水洗双处理，花香/巧香/香料香层次递进', date: '04.13' },
+      { title: '苦瓜轻体美式', desc: '超级植物苦瓜+24小时鲜榨羽衣甘蓝，一口8种果蔬；椰青冰萃美式同步回归', date: '04.13' },
+    ],
+    hot: [
+      { title: '转发请喝活动', desc: '关注+转发抽10位请喝新品', date: '04.13' },
+    ],
+    event: [],
+  },
+  kudi: {
+    hot: [
+      { title: '超大杯畅饮季', desc: '杨幂代言，9.9元特惠专区部分饮品免费升级超大杯，社群可领5.9元尝鲜券', date: '至4/30' },
+    ],
+    new: [],
+    event: [],
+  },
+  guming: {
+    new: [
+      { title: 'Pingu联名', desc: '冰咖小苹果（≈3.5颗苹果）、小苹果拿铁、苹果金凤梨，购双杯套餐赠直饮杯盲盒', date: '04.16上线' },
+    ],
+    hot: [
+      { title: '转发抽盲盒', desc: '关注+转发抽20位送Pingu合作款直饮杯盲盒', date: '04.16' },
+    ],
+    event: [],
+  },
+  molibaibai: {
+    new: [
+      { title: '咖啡系列正式上线', desc: 'SOE精品咖啡豆，洪都拉斯产地，100%阿拉比卡，酒桶发酵+中度烘焙，百利甜/香槟/香草三重香气；400次鸳鸯泰奶同步', date: '04.16' },
+    ],
+    hot: [
+      { title: '十个勤天代言', desc: '何浩楠、王一珩成为「醒春主理人」，4月21日即将上线', date: '04.17' },
+    ],
+    event: [
+      { title: '转发请喝', desc: '官宣十个勤天代言，关注+转发抽10位请喝主理人同款', date: '04.17' },
+    ],
+  },
+  chagi: {
+    hot: [
+      { title: '春日短片', desc: '「出发，光里」意境短片，草木呼吸/杏花香/橘色海，colorwalk主题', date: '04.17' },
+      { title: '小森林柚子colorwalk', desc: '转发抽奖喝奶茶', date: '04.17' },
+    ],
+    new: [
+      { title: '小森林柚子版', desc: '同步推出colorwalk联名版', date: '04.17' },
+    ],
+    event: [],
+  },
+  xichi: {
+    new: [
+      { title: '樱花青', desc: '0香精，樱花本香萃取，定制青乌龙茶汤（福建+台湾三地乌龙），鲜醇轻盈', date: '04.16' },
+    ],
+    hot: [],
+    event: [
+      { title: '莓莓麻薯蛋糕即将下架', desc: '近期下架，最后尝鲜期（深圳广州上海lab店）', date: '⚠️下架' },
+    ],
+  },
+  starbucks: {
+    new: [
+      { title: '高蛋白拿铁PRO', desc: '20g原生乳蛋白/杯，0乳糖牛乳，6.0高蛋白牛乳；周一限时活动，享拿铁同价', date: '04.12' },
+    ],
+    hot: [],
+    event: [
+      { title: '星巴克臻选限定', desc: '气炫雪克冰震（绿果/菠萝风味）+ 茶趣特调系列', date: '进行中' },
+    ],
+  },
+  chabado: {
+    hot: [
+      { title: '×崩坏：星穹铁道联名', desc: '4月25日开启，景元、爻光角色联名，镭射票组+徽章套组，转发抽精美周边', date: '4/25官宣' },
+    ],
+    new: [],
+    event: [],
+  },
+  naixue: {
+    new: [
+      { title: '纤果茶系列', desc: 'N种自然蔬果+1种低GI蔬果，4月14日-24日小程序口令抽免单券/买一赠一券', date: '04.16' },
+    ],
+    hot: [],
+    event: [],
+  },
+  coco: {
+    hot: [
+      { title: '青梅系列', desc: '青梅绿茶转发抽奖，"把星星喝进眼睛里"；香橙美式/沙棘/青梅泡泡多品清爽矩阵', date: '04.17' },
+    ],
+    new: [],
+    event: [],
+  },
+  yeye: {
+    new: [
+      { title: '葡萄熟了系列', desc: '×Dinotaeng限定联名，大溪地奶油葡萄，奶香浓郁绵密', date: '04.17' },
+    ],
+    hot: [
+      { title: '转发抽奖', desc: '关注YEYE+转发，抓5位幸运Yeah喝同款', date: '04.17' },
+    ],
+    event: [],
+  },
+  ahs: {
+    hot: [
+      { title: '鞠婧祎品牌全球代言人', desc: '自由在握主题', date: '1月1日' },
+    ],
+    new: [],
+    event: [],
+  },
+  lele: {
+    hot: [
+      { title: '×科大讯飞联名', desc: 'H5趣味测试"CEO Offer"，免费领AstronClaw首月会员，抽奖奶茶券/耳机/大疆', date: '04.17' },
+      { title: '×美团青山计划', desc: '「好杯新生」1000w回收挑战，易回收/易再生双易杯', date: '进行中' },
+    ],
+    new: [],
+    event: [],
+  },
+  peets: {
+    new: [
+      { title: '红玉橙光冰摇茶', desc: '杜松籽水+醇厚红茶+柠檬橙子，清冽唤醒', date: '04.15' },
+      { title: '栗子蛋糕', desc: '春日治愈系甜品', date: '04.15' },
+    ],
+    hot: [],
+    event: [
+      { title: '×玛氏宠享会', desc: '「美式+宠物餐盒」双人套餐', date: '进行中' },
+    ],
+  },
+  mstand: {
+    new: [
+      { title: '手机周边', desc: '手机壳（美式复古风格，撞色态度标语）+ 复古编织手机绳', date: '04.14' },
+    ],
+    hot: [],
+    event: [],
+  },
+  manner: {
+    new: [
+      { title: '芭乐冰美式', desc: '红心芭乐+气泡，全国门店+外卖同步上架', date: '04.14' },
+    ],
+    hot: [],
+    event: [
+      { title: '×浦美卢浮宫大展', desc: '联名托特包套餐（清橙芝士拿铁+阿萨姆红茶拿铁+美式，超大热杯）¥75', date: '进行中' },
+    ],
+  },
+};
+
+const HOT = [
+  { rank: 1, name: '茉莉奶白',   tag: '十个勤天代言·醒春主理人，高热度互动', bar: 98 },
+  { rank: 2, name: '茶百道',     tag: '×崩坏星穹铁道联名4/25官宣，4169转', bar: 92 },
+  { rank: 3, name: '古茗',       tag: 'Pingu联名4/16上线，高热度互动', bar: 82 },
+  { rank: 4, name: '爷爷不泡茶', tag: '×Dinotaeng联名葡萄系列，61万观看', bar: 75 },
+  { rank: 5, name: '霸王茶姬',   tag: '春日意境短片+colorwalk，226万观看', bar: 70 },
+  { rank: 6, name: '瑞幸咖啡',   tag: '金烘系列+苦瓜美式，高热度互动', bar: 65 },
+];
+
+let current = null;
+
+// Mobile sidebar toggle
+function openMenu() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('menuBtn').addEventListener('click', openMenu);
+document.getElementById('sidebarOverlay').addEventListener('click', closeMenu);
+
+function renderBrandList() {
+  const el = document.getElementById('brandList');
+  el.innerHTML = BRANDS.map(b => `
+    <div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')">
+      <span class="brand-name">${b.name}</span>
+      ${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderHot() {
+  const el = document.getElementById('hotList');
+  el.innerHTML = HOT.map(h => `
+    <div class="hot-item">
+      <div class="hot-rank">#${h.rank}</div>
+      <div class="hot-info">
+        <div class="hot-brand">${h.name}</div>
+        <div class="hot-tag">${h.tag}</div>
+        <div class="hot-bar"><div class="hot-bar-fill" style="width:${h.bar}%"></div></div>
+      </div>
+    </div>
+  `).join('');
+
+  // Mobile: horizontal scroll cards
+  const elM = document.getElementById('hotListMobile');
+  elM.innerHTML = HOT.map(h => `
+    <div class="hot-card">
+      <div class="hot-rank">#${h.rank}</div>
+      <div class="hot-brand">${h.name}</div>
+      <div class="hot-tag">${h.tag}</div>
+    </div>
+  `).join('');
+}
+
+function render(id) {
+  const d = DATA[id];
+  const brand = BRANDS.find(b => b.id === id);
+  if (!d) return;
+
+  const avatar = brand.name.slice(0, 1);
+
+  let sections = '';
+
+  if (d.new && d.new.length > 0) {
+    sections += `<div class="section">
+      <div class="section-label label-new">🆕 新品</div>
+      ${d.new.map(i => `
+        <div class="item">
+          <div class="item-title">${i.title}</div>
+          <div class="item-desc">${i.desc}</div>
+          ${i.date ? `<span class="item-date">${i.date}</span>` : ''}
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  if (d.hot && d.hot.length > 0) {
+    sections += `<div class="section">
+      <div class="section-label label-hot">🎀 营销/联名</div>
+      ${d.hot.map(i => `
+        <div class="item">
+          <div class="item-title">${i.title}</div>
+          <div class="item-desc">${i.desc}</div>
+          ${i.date ? `<span class="item-date">${i.date}</span>` : ''}
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  if (d.event && d.event.length > 0) {
+    sections += `<div class="section">
+      <div class="section-label label-event">📌 其他动态</div>
+      ${d.event.map(i => `
+        <div class="item">
+          <div class="item-title">${i.title}</div>
+          <div class="item-desc">${i.desc}</div>
+          ${i.date ? `<span class="item-date">${i.date}</span>` : ''}
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  document.getElementById('mainContent').innerHTML = `
+    <div class="brand-card show">
+      <div class="brand-header">
+        <div class="brand-avatar">${avatar}</div>
+        <div>
+          <div class="brand-title">${brand.name}</div>
+          ${brand.rank ? `<div class="brand-sub">今日热度 #${brand.rank}</div>` : ''}
+        </div>
+      </div>
+      ${sections}
+    </div>
+  `;
+}
+
+function select(id) {
+  current = id;
+  renderBrandList();
+  render(id);
+  if (window.innerWidth <= 768) closeMenu();
+}
+
+renderBrandList();
+renderHot();
+</script>
+</body>
+</html>
