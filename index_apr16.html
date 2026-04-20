@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>茶咖热点追踪看板 by 曼拾</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --bg: #f0ece8; --surface: #faf9f7; --surface2: #f5f3f0; --border: #e0dbd5; --accent: #8b6fd4; --text: #2a2835; --text2: #6b6880; --text3: #9994a8; --dim: #d4cfca; }
+    body { font-family: 'PingFang SC', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+    header { height: 52px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 16px; gap: 10px; background: rgba(240,236,232,0.96); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 200; }
+    .header-logo { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #8b6fd4, #6b4fba); display: flex; align-items: center; justify-content: center; font-size: 13px; color: white; font-weight: 800; flex-shrink: 0; }
+    .header-title { font-size: 14px; font-weight: 700; letter-spacing: -0.2px; }
+    .header-sub { font-size: 12px; color: var(--text3); padding-left: 10px; border-left: 1px solid var(--border); }
+    .header-spacer { flex: 1; }
+    .date-select-wrap { position: relative; display: inline-flex; align-items: center; }
+    .date-select { appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 4px 28px 4px 10px; font-size: 12px; color: var(--text2); cursor: pointer; outline: none; }
+    .date-select-wrap::after { content: ''; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text3); pointer-events: none; }
+    .tag-live { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); background: var(--surface); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; }
+    .tag-live .dot { width: 5px; height: 5px; border-radius: 50%; background: #6ee7b7; }
+    .layout { display: grid; grid-template-columns: 200px 1fr 260px; height: calc(100vh - 52px); }
+    .sidebar { border-right: 1px solid var(--border); overflow-y: auto; padding: 16px 0; }
+    .sidebar-section { padding: 0 12px; margin-bottom: 8px; }
+    .sidebar-label { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text2); padding: 8px 8px 4px; }
+    .brand-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 8px; border-radius: 6px; cursor: pointer; transition: background 0.12s; gap: 8px; }
+    .brand-item:hover { background: var(--surface2); }
+    .brand-item.active { background: var(--surface2); }
+    .brand-name { font-size: 13px; font-weight: 500; flex: 1; }
+    .main { overflow-y: auto; padding: 20px 24px; }
+    .brand-welcome { margin-bottom: 24px; }
+    .brand-welcome h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+    .brand-welcome p { font-size: 12px; color: var(--text3); }
+    .section { margin-bottom: 24px; }
+    .section-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .section-title { font-size: 12px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text2); white-space: nowrap; }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+    .cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .card-badge { display: inline-flex; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; margin-bottom: 10px; }
+    .card-badge.new { background: rgba(94,184,243,0.12); color: #5eb8f3; }
+    .card-badge.hot { background: rgba(240,146,106,0.12); color: #e8825e; }
+    .card h4 { font-size: 14px; font-weight: 600; margin-bottom: 5px; letter-spacing: -0.2px; }
+    .card p { font-size: 12px; color: var(--text2); line-height: 1.55; }
+    .card .date { font-size: 11px; color: var(--text3); margin-top: 8px; }
+    .right { border-left: 1px solid var(--border); overflow-y: auto; padding: 20px 16px; }
+    .right-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text2); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .hot-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .hot-item:last-child { border-bottom: none; }
+    .hot-rank { font-size: 13px; font-weight: 800; color: var(--accent); min-width: 22px; }
+    .hot-info { flex: 1; }
+    .hot-brand { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+    .hot-tag { font-size: 11px; color: var(--text2); line-height: 1.4; }
+    .hot-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .hot-bar-fill { height: 100%; border-radius: 2px; background: #e8825e; }
+    .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 12px; color: var(--text3); }
+    .empty-icon { font-size: 36px; opacity: 0.25; }
+    .empty-text { font-size: 13px; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 140; }
+    .menu-btn { display: none; width: 32px; height: 32px; border: none; background: none; cursor: pointer; padding: 4px; border-radius: 6px; flex-shrink: 0; }
+    .menu-btn svg { display: block; width: 20px; height: 20px; color: var(--text); }
+    .menu-btn:hover { background: var(--surface2); }
+    @media (max-width: 1100px) { .right { display: none; } .cards { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 768px) {
+      .menu-btn { display: flex; align-items: center; justify-content: center; }
+      .header-sub { display: none; }
+      .header-title { font-size: 13px; }
+      .layout { display: block; height: auto; }
+      .sidebar { position: fixed; top: 52px; left: 0; bottom: 0; width: 260px; background: var(--bg); border-right: 1px solid var(--border); transform: translateX(-100%); transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1); z-index: 150; overflow-y: auto; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { padding: 16px 14px; min-height: calc(100vh - 52px); }
+      .cards { grid-template-columns: 1fr; gap: 8px; }
+      .brand-welcome h2 { font-size: 20px; }
+      .section { margin-bottom: 20px; }
+      .right { display: block; border-left: none; border-top: 1px solid var(--border); padding: 16px 14px; }
+      .hot-list-mobile { display: flex; flex-direction: row; gap: 10px; overflow-x: auto; padding-bottom: 8px; }
+      .hot-list-mobile .hot-card { flex-shrink: 0; width: 160px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+      .hot-list-mobile .hot-rank { font-size: 16px; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+      .hot-list-mobile .hot-brand { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+      .hot-list-mobile .hot-tag { font-size: 11px; color: var(--text2); line-height: 1.4; }
+      .hot-list-desktop { display: none; }
+    }
+    @media (min-width: 769px) { .hot-list-mobile { display: none; } }
+  </style>
+</head>
+<body>
+<header>
+  <button class="menu-btn" id="menuBtn" aria-label="打开菜单">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="header-logo">M</div>
+  <div class="header-title">茶咖热点追踪看板</div>
+  <div class="header-sub">by 曼拾</div>
+  <div class="header-spacer"></div>
+  <div class="date-select-wrap">
+    <select class="date-select" id="dateSelect" onchange="onDateChange(this.value)">
+      <option value="04.20">04.20</option>
+      <option value="apr19">04.19</option>
+      <option value="apr18">04.18</option>
+      <option value="apr17">04.17</option>
+      <option value="apr16" selected>04.16（今日）</option>
+      <option value="apr9">04.09</option>
+    </select>
+  </div>
+  <div class="tag-live"><div class="dot"></div><span>实时更新</span></div>
+</header>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="layout">
+  <nav class="sidebar" id="sidebar"><div class="sidebar-section"><div class="sidebar-label">品牌</div><div id="brandList"></div></div></nav>
+  <main class="main" id="mainContent"><div class="empty"><div class="empty-icon">→</div><div class="empty-text">从左侧选择一个品牌查看动态</div></div></main>
+  <aside class="right hot-list-desktop"><div class="right-title">可用数据</div><div id="hotList"></div></aside>
+  <div class="hot-list-mobile" id="hotListMobile"></div>
+</div>
+<script>
+const BRANDS = [
+  { id: 'luckin',    name: '瑞幸咖啡',    rank: null },
+  { id: 'kudi',      name: '库迪咖啡',    rank: null },
+  { id: 'guming',    name: '古茗',         rank: null },
+  { id: 'molibaibai',name: '茉莉奶白',    rank: null },
+  { id: 'chagi',    name: '霸王茶姬',     rank: null },
+  { id: 'xichi',    name: '喜茶',          rank: null },
+  { id: 'starbucks',name: '星巴克',       rank: null },
+  { id: 'chabado',  name: '茶百道',       rank: null },
+  { id: 'naixue',   name: '奈雪的茶',     rank: null },
+  { id: 'coco',     name: 'CoCo',         rank: null },
+  { id: 'yeye',     name: '爷爷不泡茶',   rank: null },
+  { id: 'ahs',      name: '沪上阿姨',     rank: null },
+  { id: 'lele',     name: '乐乐茶',        rank: null },
+  { id: 'peets',    name: '皮爷咖啡',     rank: null },
+  { id: 'mstand',   name: 'M Stand',     rank: null },
+  { id: 'manner',   name: 'Manner',      rank: null },
+];
+const DATA = {
+  luckin: {
+    new: [
+      { title: '金烘系列', desc: 'IIAC最高奖项「铂金奖」，埃塞俄比亚100%阿拉比卡，日晒+水洗双处理', date: '04.13' },
+      { title: '苦瓜轻体美式', desc: '超级植物苦瓜+24小时鲜榨羽衣甘蓝，一口8种果蔬', date: '04.13' },
+    ],
+    hot: [{ title: '转发抽奖', desc: '金烘系列转发抽奖持续', date: '进行中' }],
+  },
+  kudi: {
+    hot: [{ title: '超大杯畅饮季', desc: '杨幂代言，9.9元特惠专区，部分饮品免费升级超大杯', date: '至4/30' }],
+    new: [],
+  },
+  guming: {
+    new: [{ title: 'Pingu联名', desc: '冰咖小苹果（≈3.5颗苹果）、小苹果拿铁、苹果金凤梨，双杯套餐赠直饮杯盲盒', date: '04.16' }],
+    hot: [{ title: '转发抽奖', desc: '关注+转发抽20位送Pingu合作款直饮杯盲盒', date: '进行中' }],
+  },
+  molibaibai: {
+    new: [{ title: '咖啡系列预告', desc: 'SOE精品咖啡豆，洪都拉斯产地，100%阿拉比卡，酒桶发酵+中度烘焙，百利甜/香槟/香草三重香气', date: '预告' }],
+    hot: [{ title: '十个勤天·醒春主理人', desc: '何浩楠、王一珩成为「醒春主理人」', date: '04.16' }],
+  },
+  chagi: {
+    new: [{ title: '「走走系列」预告', desc: '"出发，光里"主题短片预告，草木呼吸/杏花香/橘色海', date: '04.16' }],
+    hot: [],
+  },
+  xichi: {
+    new: [{ title: '「樱花青」', desc: '0香精，樱花本香萃取，定制青乌龙茶汤（福建+台湾三地乌龙）', date: '04.16' }],
+    hot: [{ title: '莓莓麻薯蛋糕即将下架', desc: '草莓季尾声，深圳/广州/上海LAB店在售', date: '近期下架' }],
+  },
+  starbucks: {
+    new: [{ title: '高蛋白拿铁PRO', desc: '20g原生乳蛋白/杯，0乳糖牛乳', date: '04.12' }],
+    hot: [],
+  },
+  chabado: {
+    new: [{ title: '×《崩坏：星穹铁道》联名', desc: '景元、爻光双角色，联名镭射票组+徽章套组，4/25开启', date: '04.25' }],
+    hot: [],
+  },
+  naixue: {
+    new: [{ title: '纤果茶系列', desc: 'N种自然蔬果+1种低GI蔬果', date: '04.15' }],
+    hot: [],
+  },
+  coco: {
+    new: [{ title: '青梅系列', desc: '青梅绿茶+清爽矩阵', date: '04.17' }],
+    hot: [],
+  },
+  yeye: {
+    new: [{ title: '×Dinotaeng「葡萄熟了系列」', desc: '大溪地奶油葡萄，奶香浓郁绵密', date: '04.16' }],
+    hot: [],
+  },
+  ahs: {
+    hot: [{ title: '鞠婧祎品牌全球代言人', desc: '2026年继续携手同行', date: '进行中' }],
+    new: [],
+  },
+  lele: {
+    new: [{ title: '×科大讯飞联名', desc: '「急招老板！这只虾不摸鱼」AI主题H5，3题测试抽CEO Offer', date: '04.17' }],
+    hot: [],
+  },
+  peets: {
+    new: [{ title: '红玉橙光冰摇茶', desc: '杜松籽水+醇厚红茶+柠檬橙子，清冽唤醒', date: '04.14' }],
+    hot: [],
+  },
+  mstand: {
+    new: [{ title: '手机周边', desc: '美式复古风格手机壳+复古编织手机绳，全国门店', date: '04.14' }],
+    hot: [],
+  },
+  manner: {
+    new: [{ title: '芭乐冰美式', desc: '红心芭乐+气泡，外卖同步', date: '04.13' }],
+    hot: [{ title: '×浦美卢浮宫大展联名托特包', desc: '套餐¥75', date: '进行中' }],
+  },
+};
+const HOT = [
+  { rank: 1, name: '茉莉奶白',   tag: '咖啡系列预告，SOE洪都拉斯，十个勤天4/21代言', bar: 92 },
+  { rank: 2, name: '霸王茶姬',   tag: '走走系列预告4/17全国上新，"出发光里"', bar: 88 },
+  { rank: 3, name: '古茗',       tag: 'Pingu联名4/16上线，冰咖小苹果3.5颗苹果/杯', bar: 78 },
+  { rank: 4, name: '爷爷不泡茶', tag: 'Dinotaeng联名4/16，大溪地奶油葡萄', bar: 72 },
+  { rank: 5, name: '喜茶',       tag: '樱花青4/16上新，0香精三地乌龙', bar: 68 },
+  { rank: 6, name: '乐乐茶',     tag: '科大讯飞AI联名4/17上线', bar: 65 },
+  { rank: 7, name: '奈雪的茶',   tag: '纤果茶4/15上市，低GI配方', bar: 58 },
+  { rank: 8, name: '茶百道',     tag: '崩坏星穹铁道联名4/25攻略发布', bar: 55 },
+];
+let current = null;
+function onDateChange(v) {
+  const base = 'https://yifanli94.github.io/mantea-dashboard/';
+  if (v === '04.20') window.location.href = base;
+  else if (v === 'apr19') window.location.href = base + 'index_apr19.html';
+  else if (v === 'apr18') window.location.href = base + 'index_apr18.html';
+  else if (v === 'apr17') window.location.href = base + 'index_apr17.html';
+  else if (v === 'apr16') window.location.reload();
+  else if (v === 'apr9') window.location.href = base + 'index_apr9.html';
+  else window.location.href = base;
+}
+function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('menuBtn').addEventListener('click', openMenu);
+document.getElementById('sidebarOverlay').addEventListener('click', closeMenu);
+function renderBrandList() { document.getElementById('brandList').innerHTML = BRANDS.map(b => `<div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')"><span class="brand-name">${b.name}</span></div>`).join(''); }
+function renderHot() { document.getElementById('hotList').innerHTML = HOT.map(h => `<div class="hot-item"><div class="hot-rank">#${h.rank}</div><div class="hot-info"><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div><div class="hot-bar"><div class="hot-bar-fill" style="width:${h.bar}%"></div></div></div></div>`).join(''); document.getElementById('hotListMobile').innerHTML = HOT.map(h => `<div class="hot-card"><div class="hot-rank">#${h.rank}</div><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div></div>`).join(''); }
+function render(id) {
+  const d = DATA[id]; if (!d) return;
+  const brand = BRANDS.find(b => b.id === id);
+  let html = `<div class="brand-welcome"><h2>${brand.name}</h2><p>每日热点追踪 · 2026.04.16</p></div>`;
+  if (d.new && d.new.length) { html += `<div class="section"><div class="section-head"><div class="section-title">🆕 新品上市</div><div class="section-line"></div></div><div class="cards" style="grid-template-columns:1fr 1fr">${d.new.map(item => `<div class="card"><span class="card-badge new">new</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
+  if (d.hot && d.hot.length) { html += `<div class="section"><div class="section-head"><div class="section-title">IP联名 · 营销</div><div class="section-line"></div></div><div class="cards" style="grid-template-columns:1fr 1fr">${d.hot.map(item => `<div class="card"><span class="card-badge hot">hot</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
+  document.getElementById('mainContent').innerHTML = html;
+  if (window.innerWidth <= 768) closeMenu();
+}
+function select(id) { current = id; renderBrandList(); render(id); }
+renderBrandList(); renderHot();
+</script>
+</body>
+</html>
