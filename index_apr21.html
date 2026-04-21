@@ -190,7 +190,8 @@ const DATA = {
     hot: [{ title: '「芭乐冰美式」', desc: '「芭乐冰美式」：红心芭乐+气泡，清新爽口', date: '进行中' }],
   },
 };
-const HOT = [
+const DATE_LABEL = "04.21";
+ = [
   {rank:1,name:'古茗',tag:'🆕',desc:'🍇 「超A芝士葡萄」4/23回归！1杯≈38颗葡萄，第八年应季回归'},
   {rank:2,name:'茉莉奶白',tag:'🆕',desc:'☕ 首款咖啡系列正式上线！SOE洪都拉斯酒桶发酵'},
   {rank:3,name:'茶百道',tag:'🆕',desc:'🍇 3款葡萄新品 + 崩坏星穹铁道联名4/25'},
@@ -230,7 +231,7 @@ function renderHot() { document.getElementById('hotList').innerHTML = HOT.map(h 
 function render(id) {
   const d = DATA[id]; if (!d) return;
   const brand = BRANDS.find(b => b.id === id);
-  let html = `<div class="brand-welcome"><h2>${brand.name}</h2><p>每日热点追踪 · 2026.04.19</p></div>`;
+  let html = `<div class="brand-welcome"><h2>${brand.name}</h2></div>`;
   if (d.new && d.new.length) { html += `<div class="section"><div class="section-head"><div class="section-title">🆕 新品上市</div><div class="section-line"></div><div class="section-count">${d.new.length}</div></div><div class="cards">${d.new.map(item => `<div class="card"><span class="card-badge new">new</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
   if (d.hot && d.hot.length) { html += `<div class="section"><div class="section-head"><div class="section-title">IP联名 · 营销</div><div class="section-line"></div><div class="section-count">${d.hot.length}</div></div><div class="cards">${d.hot.map(item => `<div class="card"><span class="card-badge hot">hot</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
   document.getElementById('mainContent').innerHTML = html;
