@@ -221,12 +221,13 @@ function openMenu() { document.getElementById('sidebar').classList.add('open'); 
 function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); document.body.style.overflow = ''; }
 document.getElementById('menuBtn').addEventListener('click', openMenu);
 document.getElementById('sidebarOverlay').addEventListener('click', closeMenu);
-function renderBrandList() { document.getElementById('brandList').innerHTML = BRANDS.map(b => `<div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')"><span class="brand-name">${b.name}</span>${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}</div>`).join(''); }
+const DATE_LABEL = "04.20";
+ { document.getElementById('brandList').innerHTML = BRANDS.map(b => `<div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')"><span class="brand-name">${b.name}</span>${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}</div>`).join(''); }
 function renderHot() { document.getElementById('hotList').innerHTML = HOT.map(h => `<div class="hot-item"><div class="hot-rank">#${h.rank}</div><div class="hot-info"><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div><div class="hot-bar"><div class="hot-bar-fill" style="width:${h.bar}%"></div></div></div></div>`).join(''); document.getElementById('hotListMobile').innerHTML = HOT.map(h => `<div class="hot-card"><div class="hot-rank">#${h.rank}</div><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div></div>`).join(''); }
 function render(id) {
   const d = DATA[id]; if (!d) return;
   const brand = BRANDS.find(b => b.id === id);
-  let html = `<div class="brand-welcome"><h2>${brand.name}</h2><p>每日热点追踪 · 2026.04.19</p></div>`;
+  let html = `<div class="brand-welcome"><h2>${brand.name}</h2></div>`;
   if (d.new && d.new.length) { html += `<div class="section"><div class="section-head"><div class="section-title">🆕 新品上市</div><div class="section-line"></div><div class="section-count">${d.new.length}</div></div><div class="cards">${d.new.map(item => `<div class="card"><span class="card-badge new">new</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
   if (d.hot && d.hot.length) { html += `<div class="section"><div class="section-head"><div class="section-title">IP联名 · 营销</div><div class="section-line"></div><div class="section-count">${d.hot.length}</div></div><div class="cards">${d.hot.map(item => `<div class="card"><span class="card-badge hot">hot</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
   document.getElementById('mainContent').innerHTML = html;
