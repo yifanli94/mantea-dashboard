@@ -281,10 +281,9 @@ const HOT = [
 let current = null;
 function onDateChange(v) {
   const base = 'https://yifanli94.github.io/mantea-dashboard/';
-  if (v === '04.20') window.location.href = base;
-  else if (v === 'apr19') window.location.reload();
-  else if (v === 'apr18') window.location.href = base + 'index_apr18.html';
-  else window.location.href = base;
+  if (v === 'apr9') { window.location.href = window.location.pathname; return; }
+  else if (v === 'apr8') { window.location.href = base + 'index_apr8.html'; return; }
+  else if (v === 'apr16') { window.location.href = base + 'index.html'; return; }
 }
 function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); document.body.style.overflow = ''; }

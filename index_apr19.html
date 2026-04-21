@@ -96,12 +96,15 @@
   <div class="header-spacer"></div>
   <div class="date-select-wrap">
     <select class="date-select" id="dateSelect" onchange="onDateChange(this.value)">
-      <option value="04.20">04.20</option>
-      <option value="apr19" selected>04.19（今日）</option>
+      <option value="04.21">04.21（今日）</option>
+      <option value="apr20">04.20</option>
+      <option value="apr19" selected>04.19</option>
       <option value="apr18">04.18</option>
       <option value="apr17">04.17</option>
       <option value="apr16">04.16</option>
       <option value="apr9">04.09</option>
+      <option value="apr8">04.08</option>
+      <option value="apr7">04.07</option>
     </select>
   </div>
   <div class="tag-live"><div class="dot"></div><span>实时更新</span></div>
@@ -254,10 +257,9 @@ const HOT = [
 let current = null;
 function onDateChange(v) {
   const base = 'https://yifanli94.github.io/mantea-dashboard/';
-  if (v === '04.20') window.location.href = base;
-  else if (v === 'apr19') window.location.reload();
-  else if (v === 'apr18') window.location.href = base + 'index_apr18.html';
-  else window.location.href = base;
+  if (v === 'apr19') { window.location.href = window.location.pathname; return; }
+  else if (v === 'apr18') { window.location.href = base + 'index_apr18.html'; return; }
+  else if (v === 'apr20') { window.location.href = base + 'index.html'; return; }
 }
 function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); document.body.style.overflow = ''; }
