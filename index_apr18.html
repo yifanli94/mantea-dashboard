@@ -6,18 +6,16 @@
   <title>茶咖热点追踪看板 by 曼拾</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root { --bg: #f0ece8; --surface: #faf9f7; --surface2: #f5f3f0; --border: #e0dbd5; --accent: #8b6fd4; --text: #2a2835; --text2: #6b6880; --text3: #9994a8; --new: #5eb8f3; --hot: #e8825e; --event: #9b6fd4; --welfare: #4db88a; --dim: #d4cfca; }
+    :root { --bg: #f0ece8; --surface: #faf9f7; --surface2: #f5f3f0; --border: #e0dbd5; --accent: #8b6fd4; --text: #2a2835; --text2: #6b6880; --text3: #9994a8; --new: #5eb8f3; --hot: #e8825e; --dim: #d4cfca; }
     html, body { height: 100%; }
     body { font-family: 'PingFang SC', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
     header { height: 52px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 16px; gap: 10px; position: sticky; top: 0; z-index: 200; background: rgba(240,236,232,0.96); backdrop-filter: blur(12px); }
     .menu-btn { display: none; width: 32px; height: 32px; border: none; background: none; cursor: pointer; padding: 4px; border-radius: 6px; flex-shrink: 0; }
-    .menu-btn:hover { background: var(--surface2); }
     .menu-btn svg { display: block; width: 20px; height: 20px; color: var(--text); }
     .header-logo { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #8b6fd4, #6b4fba); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; color: white; font-weight: 800; font-family: 'SF Pro Display', serif; letter-spacing: -0.5px; }
     .header-title { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; white-space: nowrap; }
     .header-sub { font-size: 12px; color: var(--text3); padding-left: 10px; border-left: 1px solid var(--border); white-space: nowrap; }
     .header-spacer { flex: 1; }
-    .header-meta { font-size: 12px; color: var(--text3); white-space: nowrap; }
     .date-select-wrap { position: relative; display: inline-flex; align-items: center; }
     .date-select { appearance: none; -webkit-appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 4px 28px 4px 10px; font-size: 12px; color: var(--text2); cursor: pointer; outline: none; }
     .date-select-wrap::after { content: ''; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text3); pointer-events: none; }
@@ -31,7 +29,6 @@
     .brand-item:hover { background: var(--surface2); }
     .brand-item.active { background: var(--surface2); }
     .brand-name { font-size: 13px; font-weight: 500; flex: 1; }
-    .brand-rank { font-size: 11px; font-weight: 700; color: var(--accent); min-width: 18px; text-align: right; font-variant-numeric: tabular-nums; }
     .main { overflow-y: auto; padding: 20px 24px; }
     .brand-welcome { margin-bottom: 24px; }
     .brand-welcome h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
@@ -40,14 +37,11 @@
     .section-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
     .section-title { font-size: 12px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text2); white-space: nowrap; }
     .section-line { flex: 1; height: 1px; background: var(--border); }
-    .section-count { font-size: 11px; color: var(--text3); background: var(--surface2); padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
     .cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; transition: border-color 0.15s, transform 0.15s; }
-    .card:hover { border-color: var(--dim); transform: translateY(-1px); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
     .card-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; margin-bottom: 10px; }
     .card-badge.new { background: rgba(94,184,243,0.12); color: var(--new); }
     .card-badge.hot { background: rgba(240,146,106,0.12); color: var(--hot); }
-    .card-badge.event { background: rgba(192,132,252,0.12); color: var(--event); }
     .card h4 { font-size: 14px; font-weight: 600; margin-bottom: 5px; letter-spacing: -0.2px; }
     .card p { font-size: 12px; color: var(--text2); line-height: 1.55; }
     .card .date { font-size: 11px; color: var(--text3); margin-top: 8px; }
@@ -61,13 +55,12 @@
     .hot-tag { font-size: 11px; color: var(--text2); line-height: 1.4; }
     .hot-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-top: 6px; overflow: hidden; }
     .hot-bar-fill { height: 100%; border-radius: 2px; background: var(--hot); }
-    .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 12px; color: var(--text3); }
-    .empty-icon { font-size: 36px; opacity: 0.25; }
-    .empty-text { font-size: 13px; }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
     .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 140; }
+    .lost-notice { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; color: var(--text3); font-size: 13px; line-height: 1.8; }
+    .lost-notice strong { color: var(--text2); }
     @media (max-width: 1100px) { .right { display: none; } .cards { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 768px) {
       .menu-btn { display: flex; align-items: center; justify-content: center; }
@@ -102,14 +95,16 @@
   <div class="header-sub">by 曼拾</div>
   <div class="header-spacer"></div>
   <div class="date-select-wrap">
-    <select class="date-select" id="dateSelect" onchange="onDateChange(this.value)">
-      <option value="04.20">04.20</option>
-      <option value="apr19">04.19</option>
-      <option value="apr18" selected>04.18（今日）</option>
-      <option value="apr17">04.17</option>
-      <option value="apr16">04.16</option>
-      <option value="apr9">04.09</option>
-    </select>
+    <select class="date-select" id="dateSelect" onchange="var v=this.value; if(v==='420')location.href='https://yifanli94.github.io/mantea-dashboard/'; else if(v==='419')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr19.html'; else if(v==='418')location.reload(); else if(v==='417')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr17.html'; else if(v==='416')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr16.html'; else if(v==='409')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr9.html'; else if(v==='408')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr8.html'; else if(v==='407')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr7.html';">
+  <option value="420">4.20</option>
+  <option value="419">4.19</option>
+  <option value="418" selected>4.18</option>
+  <option value="417">4.17</option>
+  <option value="416">4.16</option>
+  <option value="409">4.09</option>
+  <option value="408">4.08</option>
+  <option value="407">4.07</option>
+</select>
   </div>
   <div class="tag-live"><div class="dot"></div><span>实时更新</span></div>
 </header>
@@ -254,25 +249,25 @@ const DATA = {
       { title: '×浦美卢浮宫大展联名托特包', desc: '套餐¥75，全国门店+小程序+外卖', date: '进行中' },
     ],
   },
-};
+}
 const HOT = [
-  { rank: 1, name: '茉莉奶白',   tag: '咖啡系列4/16上线，SOE洪都拉斯，十个勤天4/21代言', bar: 95 },
-  { rank: 2, name: '霸王茶姬',   tag: '走走系列限定短片4/17预告，226万播放', bar: 90 },
-  { rank: 3, name: '古茗',       tag: 'Pingu联名4/16上线，冰咖小苹果3.5颗苹果/杯', bar: 78 },
-  { rank: 4, name: '爷爷不泡茶', tag: 'Dinotaeng联名4/16，大溪地奶油葡萄', bar: 72 },
-  { rank: 5, name: '乐乐茶',     tag: '科大讯飞AI联名4/17上线，CEO Offer测试', bar: 68 },
-  { rank: 6, name: '茶百道',     tag: '崩坏星穹铁道联名4/25攻略发布', bar: 65 },
-  { rank: 7, name: '喜茶',       tag: '樱花青4/16上新，0香精三地乌龙', bar: 60 },
-  { rank: 8, name: '奈雪的茶',   tag: '纤果茶4/15上市，低GI配方', bar: 55 },
-  { rank: 9, name: '星巴克',     tag: '高蛋白拿铁PRO周一活动', bar: 50 },
-  { rank: 10, name: 'CoCo',     tag: '青梅系列4/17"把星星喝进眼睛里"', bar: 45 },
+  { rank: 1, name: '茉莉奶白',   tag: '首款咖啡系列4/19正式上线，SOE洪都拉斯，十个勤天代言', bar: 95 },
+  { rank: 2, name: '霸王茶姬',   tag: '走走系列三款茶特调4/17全国上新，226万播放，限定杯贴出圈', bar: 90 },
+  { rank: 3, name: '古茗',       tag: 'Pingu联名热卖中，冰咖小苹果3.5颗苹果/杯', bar: 78 },
+  { rank: 4, name: '爷爷不泡茶', tag: 'Dinotaeng联名4/16上线，大溪地奶油葡萄22.8万播放', bar: 72 },
+  { rank: 5, name: '茶百道',     tag: '崩坏星穹铁道联名4/25攻略发布', bar: 68 },
+  { rank: 6, name: '乐乐茶',     tag: '科大讯飞AI联名H5，3题测试抽CEO Offer', bar: 65 },
+  { rank: 7, name: '奈雪的茶',   tag: '纤果茶4/15上市，低GI配方', bar: 58 },
+  { rank: 8, name: 'CoCo',       tag: '山野青梅4/16时令回归', bar: 52 },
+  { rank: 9, name: '星巴克',     tag: '高蛋白拿铁PRO周一同价', bar: 48 },
+  { rank: 10, name: '喜茶',      tag: '樱花芭乐白桃持续，莓莓麻薯蛋糕近期下架', bar: 45 },
 ];
 let current = null;
 function onDateChange(v) {
-  if (v === 'apr18') { window.location.reload(); return; }
   const base = 'https://yifanli94.github.io/mantea-dashboard/';
   if (v === '04.20') window.location.href = base;
-  else if (v === 'apr19') window.location.href = base + 'index_apr19.html';
+  else if (v === 'apr19') window.location.reload();
+  else if (v === 'apr18') window.location.href = base + 'index_apr18.html';
   else window.location.href = base;
 }
 function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -284,7 +279,7 @@ function renderHot() { document.getElementById('hotList').innerHTML = HOT.map(h 
 function render(id) {
   const d = DATA[id]; if (!d) return;
   const brand = BRANDS.find(b => b.id === id);
-  let html = `<div class="brand-welcome"><h2>${brand.name}</h2><p>每日热点追踪 · 2026.04.18</p></div>`;
+  let html = `<div class="brand-welcome"><h2>${brand.name}</h2><p>每日热点追踪 · 2026.04.19</p></div>`;
   if (d.new && d.new.length) { html += `<div class="section"><div class="section-head"><div class="section-title">🆕 新品上市</div><div class="section-line"></div><div class="section-count">${d.new.length}</div></div><div class="cards">${d.new.map(item => `<div class="card"><span class="card-badge new">new</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
   if (d.hot && d.hot.length) { html += `<div class="section"><div class="section-head"><div class="section-title">IP联名 · 营销</div><div class="section-line"></div><div class="section-count">${d.hot.length}</div></div><div class="cards">${d.hot.map(item => `<div class="card"><span class="card-badge hot">hot</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
   document.getElementById('mainContent').innerHTML = html;

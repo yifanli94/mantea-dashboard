@@ -6,591 +6,134 @@
   <title>茶咖热点追踪看板 by 曼拾</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg: #f0ece8;
-      --surface: #faf9f7;
-      --surface2: #f5f3f0;
-      --border: #e0dbd5;
-      --accent: #8b6fd4;
-      --accent2: #7c6af7;
-      --text: #2a2835;
-      --text2: #6b6880;
-      --text3: #9994a8;
-      --new: #5eb8f3;
-      --hot: #e8825e;
-      --event: #9b6fd4;
-      --welfare: #4db88a;
-      --dim: #d4cfca;
-    }
-
+    :root { --bg: #f0ece8; --surface: #faf9f7; --surface2: #f5f3f0; --border: #e0dbd5; --accent: #8b6fd4; --text: #2a2835; --text2: #6b6880; --text3: #9994a8; --new: #5eb8f3; --hot: #e8825e; --dim: #d4cfca; }
     html, body { height: 100%; }
-
-    body {
-      font-family: 'PingFang SC', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    /* ── Header ── */
-    header {
-      height: 52px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      gap: 10px;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      background: rgba(240,236,232,0.96);
-      backdrop-filter: blur(12px);
-    }
-
-    .menu-btn {
-      display: none;
-      width: 32px;
-      height: 32px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 6px;
-      flex-shrink: 0;
-    }
-    .menu-btn:hover { background: var(--surface2); }
+    body { font-family: 'PingFang SC', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+    header { height: 52px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 16px; gap: 10px; position: sticky; top: 0; z-index: 200; background: rgba(240,236,232,0.96); backdrop-filter: blur(12px); }
+    .menu-btn { display: none; width: 32px; height: 32px; border: none; background: none; cursor: pointer; padding: 4px; border-radius: 6px; flex-shrink: 0; }
     .menu-btn svg { display: block; width: 20px; height: 20px; color: var(--text); }
-
-    .header-logo {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #8b6fd4, #6b4fba);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      flex-shrink: 0;
-      color: white;
-      font-weight: 800;
-      font-family: 'SF Pro Display', serif;
-      letter-spacing: -0.5px;
-    }
-
-    .header-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.2px;
-      white-space: nowrap;
-    }
-
-    .header-sub {
-      font-size: 12px;
-      color: var(--text3);
-      padding-left: 10px;
-      border-left: 1px solid var(--border);
-      white-space: nowrap;
-    }
-
+    .header-logo { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #8b6fd4, #6b4fba); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; color: white; font-weight: 800; font-family: 'SF Pro Display', serif; letter-spacing: -0.5px; }
+    .header-title { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; white-space: nowrap; }
+    .header-sub { font-size: 12px; color: var(--text3); padding-left: 10px; border-left: 1px solid var(--border); white-space: nowrap; }
     .header-spacer { flex: 1; }
-
-    .header-meta {
-      font-size: 12px;
-      color: var(--text3);
-      white-space: nowrap;
-    }
-
-    .tag-live {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      color: var(--text2);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 3px 10px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-
-    .tag-live .dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #6ee7b7;
-    }
-
-    /* ── Layout ── */
-    .layout {
-      display: grid;
-      grid-template-columns: 200px 1fr 260px;
-      height: calc(100vh - 52px);
-    }
-
-    /* ── Sidebar ── */
-    .sidebar {
-      border-right: 1px solid var(--border);
-      overflow-y: auto;
-      padding: 16px 0;
-      position: relative;
-      z-index: 150;
-    }
-
-    .sidebar-section {
-      padding: 0 12px;
-      margin-bottom: 8px;
-    }
-
-    .sidebar-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text2);
-      padding: 8px 8px 4px;
-    }
-
-    .brand-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 7px 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.12s;
-      gap: 8px;
-    }
-
+    .date-select-wrap { position: relative; display: inline-flex; align-items: center; }
+    .date-select { appearance: none; -webkit-appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 4px 28px 4px 10px; font-size: 12px; color: var(--text2); cursor: pointer; outline: none; }
+    .date-select-wrap::after { content: ''; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text3); pointer-events: none; }
+    .tag-live { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); background: var(--surface); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+    .tag-live .dot { width: 5px; height: 5px; border-radius: 50%; background: #6ee7b7; }
+    .layout { display: grid; grid-template-columns: 200px 1fr 260px; height: calc(100vh - 52px); }
+    .sidebar { border-right: 1px solid var(--border); overflow-y: auto; padding: 16px 0; position: relative; z-index: 150; }
+    .sidebar-section { padding: 0 12px; margin-bottom: 8px; }
+    .sidebar-label { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text2); padding: 8px 8px 4px; }
+    .brand-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 8px; border-radius: 6px; cursor: pointer; transition: background 0.12s; gap: 8px; }
     .brand-item:hover { background: var(--surface2); }
     .brand-item.active { background: var(--surface2); }
-
-    .brand-name {
-      font-size: 13px;
-      font-weight: 500;
-      flex: 1;
-    }
-
-    .brand-rank {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--accent);
-      min-width: 18px;
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* ── Main ── */
-    .main {
-      overflow-y: auto;
-      padding: 20px 24px;
-    }
-
-    .brand-welcome {
-      margin-bottom: 24px;
-    }
-
-    .brand-welcome h2 {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 4px;
-    }
-
-    .brand-welcome p {
-      font-size: 12px;
-      color: var(--text3);
-    }
-
-    .section {
-      margin-bottom: 24px;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--text2);
-      white-space: nowrap;
-    }
-
-    .section-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .section-count {
-      font-size: 11px;
-      color: var(--text3);
-      background: var(--surface2);
-      padding: 2px 8px;
-      border-radius: 10px;
-      white-space: nowrap;
-    }
-
-    /* ── Cards Grid ── */
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-      transition: border-color 0.15s, transform 0.15s;
-    }
-
-    .card:hover {
-      border-color: var(--dim);
-      transform: translateY(-1px);
-    }
-
-    .card-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      padding: 2px 7px;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
-
+    .brand-name { font-size: 13px; font-weight: 500; flex: 1; }
+    .main { overflow-y: auto; padding: 20px 24px; }
+    .brand-welcome { margin-bottom: 24px; }
+    .brand-welcome h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+    .brand-welcome p { font-size: 12px; color: var(--text3); }
+    .section { margin-bottom: 24px; }
+    .section-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .section-title { font-size: 12px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text2); white-space: nowrap; }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+    .cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .card-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; margin-bottom: 10px; }
     .card-badge.new { background: rgba(94,184,243,0.12); color: var(--new); }
     .card-badge.hot { background: rgba(240,146,106,0.12); color: var(--hot); }
-    .card-badge.event { background: rgba(192,132,252,0.12); color: var(--event); }
-    .card-badge.welfare { background: rgba(110,231,183,0.12); color: var(--welfare); }
-
-    .card h4 {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 5px;
-      letter-spacing: -0.2px;
-    }
-
-    .card p {
-      font-size: 12px;
-      color: var(--text2);
-      line-height: 1.55;
-    }
-
-    .card .date {
-      font-size: 11px;
-      color: var(--text3);
-      margin-top: 8px;
-    }
-
-    /* ── Right Panel ── */
-    .right {
-      border-left: 1px solid var(--border);
-      overflow-y: auto;
-      padding: 20px 16px;
-    }
-
-    .right-title {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text2);
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .hot-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
+    .card h4 { font-size: 14px; font-weight: 600; margin-bottom: 5px; letter-spacing: -0.2px; }
+    .card p { font-size: 12px; color: var(--text2); line-height: 1.55; }
+    .card .date { font-size: 11px; color: var(--text3); margin-top: 8px; }
+    .right { border-left: 1px solid var(--border); overflow-y: auto; padding: 20px 16px; }
+    .right-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text2); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .hot-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .hot-item:last-child { border-bottom: none; }
-
-    .hot-rank {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--accent);
-      min-width: 22px;
-      line-height: 1.2;
-    }
-
+    .hot-rank { font-size: 13px; font-weight: 800; color: var(--accent); min-width: 22px; line-height: 1.2; }
     .hot-info { flex: 1; }
-
-    .hot-brand {
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .hot-tag {
-      font-size: 11px;
-      color: var(--text2);
-      line-height: 1.4;
-    }
-
-    .hot-bar {
-      height: 3px;
-      background: var(--surface2);
-      border-radius: 2px;
-      margin-top: 6px;
-      overflow: hidden;
-    }
-
-    .hot-bar-fill {
-      height: 100%;
-      border-radius: 2px;
-      background: var(--hot);
-    }
-
-    /* ── Empty ── */
-    .empty {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 60vh;
-      gap: 12px;
-      color: var(--text3);
-    }
-
-    .empty-icon {
-      font-size: 36px;
-      opacity: 0.25;
-    }
-
-    .empty-text {
-      font-size: 13px;
-    }
-
-    /* ── Scrollbar ── */
+    .hot-brand { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+    .hot-tag { font-size: 11px; color: var(--text2); line-height: 1.4; }
+    .hot-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .hot-bar-fill { height: 100%; border-radius: 2px; background: var(--hot); }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
-
-    /* ── Mobile: Hamburger Overlay ── */
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.35);
-      z-index: 140;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 1100px) {
-      .right { display: none; }
-      .cards { grid-template-columns: 1fr 1fr; }
-    }
-
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 140; }
+    .lost-notice { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; color: var(--text3); font-size: 13px; line-height: 1.8; }
+    .lost-notice strong { color: var(--text2); }
+    @media (max-width: 1100px) { .right { display: none; } .cards { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 768px) {
       .menu-btn { display: flex; align-items: center; justify-content: center; }
-
       .header-sub { display: none; }
       .header-title { font-size: 13px; }
-
-      .layout {
-        display: block;
-        height: auto;
-      }
-
-      /* Sidebar: slide-in drawer */
-      .sidebar {
-        position: fixed;
-        top: 52px;
-        left: 0;
-        bottom: 0;
-        width: 260px;
-        background: var(--bg);
-        border-right: 1px solid var(--border);
-        transform: translateX(-100%);
-        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 150;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .sidebar-overlay.open {
-        display: block;
-      }
-
-      .main {
-        padding: 16px 14px;
-        min-height: calc(100vh - 52px);
-      }
-
-      .cards {
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
-
-      .brand-welcome h2 {
-        font-size: 20px;
-      }
-
+      .layout { display: block; height: auto; }
+      .sidebar { position: fixed; top: 52px; left: 0; bottom: 0; width: 260px; background: var(--bg); border-right: 1px solid var(--border); transform: translateX(-100%); transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1); z-index: 150; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .main { padding: 16px 14px; min-height: calc(100vh - 52px); }
+      .cards { grid-template-columns: 1fr; gap: 8px; }
+      .brand-welcome h2 { font-size: 20px; }
       .section { margin-bottom: 20px; }
-
-      /* Hot panel becomes a horizontal scroll on mobile */
-      .right {
-        display: block;
-        border-left: none;
-        border-top: 1px solid var(--border);
-        padding: 16px 14px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .right-title {
-        font-size: 11px;
-        margin-bottom: 10px;
-      }
-
-      .hot-list-mobile {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        overflow-x: auto;
-        padding-bottom: 8px;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .hot-list-mobile .hot-card {
-        flex-shrink: 0;
-        width: 160px;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 12px;
-      }
-
-      .hot-list-mobile .hot-rank {
-        font-size: 16px;
-        font-weight: 800;
-        color: var(--accent);
-        margin-bottom: 6px;
-      }
-
-      .hot-list-mobile .hot-brand {
-        font-size: 12px;
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-
-      .hot-list-mobile .hot-tag {
-        font-size: 11px;
-        color: var(--text2);
-        line-height: 1.4;
-      }
-
+      .right { display: block; border-left: none; border-top: 1px solid var(--border); padding: 16px 14px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .hot-list-mobile { display: flex; flex-direction: row; gap: 10px; overflow-x: auto; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
+      .hot-list-mobile .hot-card { flex-shrink: 0; width: 160px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+      .hot-list-mobile .hot-rank { font-size: 16px; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+      .hot-list-mobile .hot-brand { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+      .hot-list-mobile .hot-tag { font-size: 11px; color: var(--text2); line-height: 1.4; }
       .hot-list-desktop { display: none; }
     }
-
-    @media (min-width: 769px) {
-      .hot-list-mobile { display: none; }
-    }
+    @media (min-width: 769px) { .hot-list-mobile { display: none; } }
   </style>
 </head>
 <body>
-
 <header>
   <button class="menu-btn" id="menuBtn" aria-label="打开菜单">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <line x1="3" y1="6" x2="21" y2="6"/>
-      <line x1="3" y1="12" x2="21" y2="12"/>
-      <line x1="3" y1="18" x2="21" y2="18"/>
-    </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
   <div class="header-logo">M</div>
   <div class="header-title">茶咖热点追踪看板</div>
   <div class="header-sub">by 曼拾</div>
   <div class="header-spacer"></div>
-  <div class="header-meta" id="dateLabel">2026.04.08</div>
-  <div class="tag-live">
-    <div class="dot"></div>
-    <span>实时更新</span>
+  <div class="date-select-wrap">
+    <select class="date-select" id="dateSelect" onchange="var v=this.value; if(v==='420')location.href='https://yifanli94.github.io/mantea-dashboard/'; else if(v==='419')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr19.html'; else if(v==='418')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr18.html'; else if(v==='417')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr17.html'; else if(v==='416')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr16.html'; else if(v==='409')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr9.html'; else if(v==='408')location.reload(); else if(v==='407')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr7.html';">
+  <option value="420">4.20</option>
+  <option value="419">4.19</option>
+  <option value="418">4.18</option>
+  <option value="417">4.17</option>
+  <option value="416">4.16</option>
+  <option value="409">4.09</option>
+  <option value="408" selected>4.08</option>
+  <option value="407">4.07</option>
+</select>
   </div>
-    <select id="dateSelect" onchange="var v=this.value; if(v==='04.20'||v==='apr19')location.href=v==='04.20'?'https://yifanli94.github.io/mantea-dashboard/':'https://yifanli94.github.io/mantea-dashboard/index_apr19.html'; else if(v==='apr7')location.reload(); else location.href='https://yifanli94.github.io/mantea-dashboard/index_'+v+'.html';" style="font-size:11px;font-weight:600;color:#8b6fd4;background:rgba(139,111,212,0.1);border:1px solid rgba(139,111,212,0.3);border-radius:20px;padding:3px 24px 3px 10px;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22 viewBox=%220 0 10 6%22><path d=%22M1 1l4 4 4-4%22 stroke=%22%238b6fd4%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/></svg>');background-repeat:no-repeat;background-position:calc(100% - 8px) center;">
-    <option value="04.20">04.20</option>
-    <option value="apr19">04.19</option>
-    <option value="apr18">04.18</option>
-    <option value="apr17">04.17</option>
-    <option value="apr16">04.16</option>
-    <option value="apr9">04.09</option>
-    <option value="apr8" selected>04.08</option>
-    <option value="apr7">04.07</option>
-  </select></header>
-
-<!-- Mobile sidebar overlay -->
+  <div class="tag-live"><div class="dot"></div><span>实时更新</span></div>
+</header>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
 <div class="layout">
-
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">品牌</div>
-      <div id="brandList"></div>
-    </div>
-  </nav>
-
-  <main class="main" id="mainContent">
-    <div class="empty">
-      <div class="empty-icon">→</div>
-      <div class="empty-text">从左侧选择一个品牌查看动态</div>
-    </div>
-  </main>
-
-  <!-- Desktop right panel -->
-  <aside class="right hot-list-desktop">
-    <div class="right-title">今日热度</div>
-    <div id="hotList"></div>
-  </aside>
-
-  <!-- Mobile hot panel -->
+  <nav class="sidebar" id="sidebar"><div class="sidebar-section"><div class="sidebar-label">品牌</div><div id="brandList"></div></div></nav>
+  <main class="main" id="mainContent"><div class="empty"><div class="empty-icon">→</div><div class="empty-text">从左侧选择一个品牌查看动态</div></div></main>
+  <aside class="right hot-list-desktop"><div class="right-title">今日热度</div><div id="hotList"></div></aside>
   <div class="hot-list-mobile" id="hotListMobile"></div>
-
 </div>
-
 <script>
 const BRANDS = [
-  { id: 'luckin',    name: '瑞幸咖啡',    rank: 1 },
-  { id: 'kudi',      name: '库迪咖啡',    rank: 2 },
-  { id: 'guming',    name: '古茗',         rank: 3 },
-  { id: 'molibaibai',name: '茉莉奶白',  rank: 4 },
-  { id: 'chagi',    name: '霸王茶姬',     rank: 5 },
-  { id: 'xichi',    name: '喜茶',          rank: 6 },
-  { id: 'starbucks',name: '星巴克',       rank: 7 },
-  { id: 'chabado',  name: '茶百道',       rank: 8 },
-  { id: 'naixue',   name: '奈雪的茶',     rank: 9 },
-  { id: 'coco',     name: 'CoCo',         rank: 10 },
-  { id: 'yeye',     name: '爷爷不泡茶',   rank: 11 },
-  { id: 'ahs',      name: '沪上阿姨',     rank: 12 },
-  { id: 'lele',     name: '乐乐茶',        rank: 13 },
-  { id: 'peets',    name: '皮爷咖啡',     rank: 14 },
-  { id: 'mstand',   name: 'M Stand',     rank: 15 },
-  { id: 'manner',   name: 'Manner',      rank: 16 },
+  { id: 'luckin',    name: '瑞幸咖啡',    rank: null },
+  { id: 'kudi',      name: '库迪咖啡',    rank: null },
+  { id: 'guming',    name: '古茗',         rank: null },
+  { id: 'molibaibai',name: '茉莉奶白',    rank: null },
+  { id: 'chagi',    name: '霸王茶姬',     rank: null },
+  { id: 'xichi',    name: '喜茶',          rank: null },
+  { id: 'starbucks',name: '星巴克',       rank: null },
+  { id: 'chabado',  name: '茶百道',       rank: null },
+  { id: 'naixue',   name: '奈雪的茶',     rank: null },
+  { id: 'coco',     name: 'CoCo',         rank: null },
+  { id: 'yeye',     name: '爷爷不泡茶',   rank: null },
+  { id: 'ahs',      name: '沪上阿姨',     rank: null },
+  { id: 'lele',     name: '乐乐茶',        rank: null },
+  { id: 'peets',    name: '皮爷咖啡',     rank: null },
+  { id: 'mstand',   name: 'M Stand',     rank: null },
+  { id: 'manner',   name: 'Manner',      rank: null },
 ];
-
 const DATA = {
   luckin: {
     new: [],
@@ -699,141 +242,44 @@ const DATA = {
       { title: '浦美卢浮宫大展联名', desc: '托特包套餐全国上线', date: '03.30' },
     ],
   },
-};
-
-
+}
 const HOT = [
-  { rank: 1, name: '喜茶',       tag: 'HelloKitty 2.0全国上线 · 联名全套登场', bar: 95 },
-  { rank: 2, name: '霸王茶姬',   tag: '龙井回归 · 早系列买一赠一', bar: 88 },
-  { rank: 3, name: '茶百道',     tag: '豆香系列明日上市预热', bar: 80 },
-  { rank: 4, name: '星巴克',     tag: '高蛋白拿铁PRO上市推广', bar: 72 },
-  { rank: 5, name: '瑞幸咖啡',  tag: '生椰5周年Campaign持续', bar: 65 },
-  { rank: 6, name: 'CoCo',     tag: '周三Co粉日五折', bar: 58 },
+  { rank: 1, name: '茉莉奶白',   tag: '首款咖啡系列4/19正式上线，SOE洪都拉斯，十个勤天代言', bar: 95 },
+  { rank: 2, name: '霸王茶姬',   tag: '走走系列三款茶特调4/17全国上新，226万播放，限定杯贴出圈', bar: 90 },
+  { rank: 3, name: '古茗',       tag: 'Pingu联名热卖中，冰咖小苹果3.5颗苹果/杯', bar: 78 },
+  { rank: 4, name: '爷爷不泡茶', tag: 'Dinotaeng联名4/16上线，大溪地奶油葡萄22.8万播放', bar: 72 },
+  { rank: 5, name: '茶百道',     tag: '崩坏星穹铁道联名4/25攻略发布', bar: 68 },
+  { rank: 6, name: '乐乐茶',     tag: '科大讯飞AI联名H5，3题测试抽CEO Offer', bar: 65 },
+  { rank: 7, name: '奈雪的茶',   tag: '纤果茶4/15上市，低GI配方', bar: 58 },
+  { rank: 8, name: 'CoCo',       tag: '山野青梅4/16时令回归', bar: 52 },
+  { rank: 9, name: '星巴克',     tag: '高蛋白拿铁PRO周一同价', bar: 48 },
+  { rank: 10, name: '喜茶',      tag: '樱花芭乐白桃持续，莓莓麻薯蛋糕近期下架', bar: 45 },
 ];
-
-
 let current = null;
-const CURRENT_DATE = "2026.04.08";
-
-// Mobile sidebar toggle
-function openMenu() {
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('sidebarOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+function onDateChange(v) {
+  const base = 'https://yifanli94.github.io/mantea-dashboard/';
+  if (v === '04.20') window.location.href = base;
+  else if (v === 'apr19') window.location.reload();
+  else if (v === 'apr18') window.location.href = base + 'index_apr18.html';
+  else window.location.href = base;
 }
-
-function closeMenu() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebarOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
+function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); document.body.style.overflow = ''; }
 document.getElementById('menuBtn').addEventListener('click', openMenu);
 document.getElementById('sidebarOverlay').addEventListener('click', closeMenu);
-
-function renderBrandList() {
-  const el = document.getElementById('brandList');
-  el.innerHTML = BRANDS.map(b => `
-    <div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')">
-      <span class="brand-name">${b.name}</span>
-      ${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}
-    </div>
-  `).join('');
-}
-
-function renderHot() {
-  const el = document.getElementById('hotList');
-  el.innerHTML = HOT.map(h => `
-    <div class="hot-item">
-      <div class="hot-rank">#${h.rank}</div>
-      <div class="hot-info">
-        <div class="hot-brand">${h.name}</div>
-        <div class="hot-tag">${h.tag}</div>
-        <div class="hot-bar"><div class="hot-bar-fill" style="width:${h.bar}%"></div></div>
-      </div>
-    </div>
-  `).join('');
-
-  // Mobile: horizontal scroll cards
-  const elM = document.getElementById('hotListMobile');
-  elM.innerHTML = HOT.map(h => `
-    <div class="hot-card">
-      <div class="hot-rank">#${h.rank}</div>
-      <div class="hot-brand">${h.name}</div>
-      <div class="hot-tag">${h.tag}</div>
-    </div>
-  `).join('');
-}
-
+function renderBrandList() { document.getElementById('brandList').innerHTML = BRANDS.map(b => `<div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')"><span class="brand-name">${b.name}</span>${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}</div>`).join(''); }
+function renderHot() { document.getElementById('hotList').innerHTML = HOT.map(h => `<div class="hot-item"><div class="hot-rank">#${h.rank}</div><div class="hot-info"><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div><div class="hot-bar"><div class="hot-bar-fill" style="width:${h.bar}%"></div></div></div></div>`).join(''); document.getElementById('hotListMobile').innerHTML = HOT.map(h => `<div class="hot-card"><div class="hot-rank">#${h.rank}</div><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div></div>`).join(''); }
 function render(id) {
-  const d = DATA[id];
-  if (!d) return;
+  const d = DATA[id]; if (!d) return;
   const brand = BRANDS.find(b => b.id === id);
-
-  let html = `
-    <div class="brand-welcome">
-      <h2>${brand.name}</h2>
-      <p>每日热点追踪 · 2026.04.08</p>
-    </div>
-  `;
-
-  if (d.new && d.new.length) {
-    html += `
-      <div class="section">
-        <div class="section-head">
-          <div class="section-title">🆕 新品上市</div>
-          <div class="section-line"></div>
-          <div class="section-count">${d.new.length}</div>
-        </div>
-        <div class="cards">
-          ${d.new.map(item => `
-            <div class="card">
-              <span class="card-badge new">new</span>
-              <h4>${item.title}</h4>
-              <p>${item.desc}</p>
-              <div class="date">${item.date}</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  }
-
-  if (d.hot && d.hot.length) {
-    html += `
-      <div class="section">
-        <div class="section-head">
-          <div class="section-title">IP联名 · 营销</div>
-          <div class="section-line"></div>
-          <div class="section-count">${d.hot.length}</div>
-        </div>
-        <div class="cards">
-          ${d.hot.map(item => `
-            <div class="card">
-              <span class="card-badge hot">hot</span>
-              <h4>${item.title}</h4>
-              <p>${item.desc}</p>
-              <div class="date">${item.date}</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  }
-
+  let html = `<div class="brand-welcome"><h2>${brand.name}</h2><p>每日热点追踪 · 2026.04.19</p></div>`;
+  if (d.new && d.new.length) { html += `<div class="section"><div class="section-head"><div class="section-title">🆕 新品上市</div><div class="section-line"></div><div class="section-count">${d.new.length}</div></div><div class="cards">${d.new.map(item => `<div class="card"><span class="card-badge new">new</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
+  if (d.hot && d.hot.length) { html += `<div class="section"><div class="section-head"><div class="section-title">IP联名 · 营销</div><div class="section-line"></div><div class="section-count">${d.hot.length}</div></div><div class="cards">${d.hot.map(item => `<div class="card"><span class="card-badge hot">hot</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
   document.getElementById('mainContent').innerHTML = html;
-  // Close sidebar on mobile after selection
   if (window.innerWidth <= 768) closeMenu();
 }
-
-function select(id) {
-  current = id;
-  renderBrandList();
-  render(id);
-}
-
-renderBrandList();
-renderHot();
+function select(id) { current = id; renderBrandList(); render(id); }
+renderBrandList(); renderHot();
 </script>
 </body>
 </html>
