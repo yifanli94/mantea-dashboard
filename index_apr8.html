@@ -95,16 +95,17 @@
   <div class="header-sub">by 曼拾</div>
   <div class="header-spacer"></div>
   <div class="date-select-wrap">
-    <select class="date-select" id="dateSelect" onchange="var v=this.value; if(v==='420')location.href='https://yifanli94.github.io/mantea-dashboard/'; else if(v==='419')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr19.html'; else if(v==='418')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr18.html'; else if(v==='417')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr17.html'; else if(v==='416')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr16.html'; else if(v==='409')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr9.html'; else if(v==='408')location.reload(); else if(v==='407')location.href='https://yifanli94.github.io/mantea-dashboard/index_apr7.html';">
-  <option value="420">4.20</option>
-  <option value="419">4.19</option>
-  <option value="418">4.18</option>
-  <option value="417">4.17</option>
-  <option value="416">4.16</option>
-  <option value="409">4.09</option>
-  <option value="408" selected>4.08</option>
-  <option value="407">4.07</option>
-</select>
+    <select class="date-select" id="dateSelect" onchange="onDateChange(this.value)">
+      <option value="04.21">04.21（今日）</option>
+      <option value="apr20">04.20</option>
+      <option value="apr19">04.19</option>
+      <option value="apr18">04.18</option>
+      <option value="apr17">04.17</option>
+      <option value="apr16">04.16</option>
+      <option value="apr9">04.09</option>
+      <option value="apr8" selected>04.08</option>
+      <option value="apr7">04.07</option>
+    </select>
   </div>
   <div class="tag-live"><div class="dot"></div><span>实时更新</span></div>
 </header>
