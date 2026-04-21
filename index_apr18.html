@@ -116,7 +116,7 @@
   <aside class="right hot-list-desktop"><div class="right-title">今日热度</div><div id="hotList"></div></aside>
   <div class="hot-list-mobile" id="hotListMobile"></div>
 </div>
-<script>
+<script><script>
 const BRANDS = [
   { id: 'luckin',    name: '瑞幸咖啡',    rank: null },
   { id: 'kudi',      name: '库迪咖啡',    rank: null },
@@ -274,7 +274,8 @@ function openMenu() { document.getElementById('sidebar').classList.add('open'); 
 function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); document.body.style.overflow = ''; }
 document.getElementById('menuBtn').addEventListener('click', openMenu);
 document.getElementById('sidebarOverlay').addEventListener('click', closeMenu);
-function renderBrandList() { document.getElementById('brandList').innerHTML = BRANDS.map(b => `<div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')"><span class="brand-name">${b.name}</span>${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}</div>`).join(''); }.innerHTML = BRANDS.map(b => `<div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')"><span class="brand-name">${b.name}</span>${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}</div>`).join(''); }
+function renderBrandList() { document.getElementById('brandList').innerHTML = BRANDS.map(b => `<div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')"><span class="brand-name">${b.name}</span>${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}</div>`).join(''); }
+
 function renderHot() { document.getElementById('hotList').innerHTML = HOT.map(h => `<div class="hot-item"><div class="hot-rank">#${h.rank}</div><div class="hot-info"><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div><div class="hot-bar"><div class="hot-bar-fill" style="width:${h.bar}%"></div></div></div></div>`).join(''); document.getElementById('hotListMobile').innerHTML = HOT.map(h => `<div class="hot-card"><div class="hot-rank">#${h.rank}</div><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div></div>`).join(''); }
 function render(id) {
   const d = DATA[id]; if (!d) return;
