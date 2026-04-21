@@ -96,7 +96,7 @@
   <div class="header-spacer"></div>
   <div class="date-select-wrap">
     <select class="date-select" id="dateSelect" onchange="onDateChange(this.value)">
-      <option value="04.21" selected>04.21（今日）</option>
+      <option value="apr21" selected>04.21（今日）</option>
       <option value="apr20">04.20</option>
       <option value="apr19">04.19</option>
       <option value="apr18">04.18</option>
@@ -211,16 +211,15 @@ const HOT = [
 let current = null;
 function onDateChange(v) {
   const base = 'https://yifanli94.github.io/mantea-dashboard/';
-  if (v === '04.21') { window.location.href = window.location.pathname; return; }
-  else if (v === 'apr20') window.location.href = base + 'index_apr20.html';
-  else if (v === 'apr19') window.location.href = base + 'index_apr19.html';
-  else if (v === 'apr18') window.location.href = base + 'index_apr18.html';
-  else if (v === 'apr17') window.location.href = base + 'index_apr17.html';
-  else if (v === 'apr16') window.location.href = base + 'index_apr16.html';
-  else if (v === 'apr9') window.location.href = base + 'index_apr9.html';
-  else if (v === 'apr8') window.location.href = base + 'index_apr8.html';
-  else if (v === 'apr7') window.location.href = base + 'index_apr7.html';
-  else return;
+  if (v === 'apr21') { window.location.href = base + 'index_apr21.html'; return; }
+  else if (v === 'apr20') { window.location.href = base + 'index_apr20.html'; return; }
+  else if (v === 'apr19') { window.location.href = base + 'index_apr19.html'; return; }
+  else if (v === 'apr18') { window.location.href = base + 'index_apr18.html'; return; }
+  else if (v === 'apr17') { window.location.href = base + 'index_apr17.html'; return; }
+  else if (v === 'apr16') { window.location.href = base + 'index_apr16.html'; return; }
+  else if (v === 'apr9') { window.location.href = base + 'index_apr9.html'; return; }
+  else if (v === 'apr8') { window.location.href = base + 'index_apr8.html'; return; }
+  else if (v === 'apr7') { window.location.href = base + 'index_apr7.html'; return; }
 }
 function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); document.body.style.overflow = ''; }
