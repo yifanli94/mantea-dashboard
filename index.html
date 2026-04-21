@@ -98,137 +98,91 @@
   <div class="hot-list-mobile" id="hotListMobile"></div>
 </div>
 <script>
-const BRANDS = [{ id: 'luckin', name: '瑞幸咖啡', rank: null },{ id: 'kudi', name: '库迪', rank: null },{ id: 'guming', name: '古茗', rank: null },{ id: 'molibaibai', name: '茉莉奶白', rank: null },{ id: 'chagi', name: '霸王茶姬', rank: null },{ id: 'xichi', name: '喜茶', rank: null },{ id: 'starbucks', name: '星巴克', rank: null },{ id: 'chabaidao', name: '茶百道', rank: null },{ id: 'naixue', name: '奈雪的茶', rank: null },{ id: 'coco', name: 'CoCo', rank: null },{ id: 'yeye', name: '爷爷不泡茶', rank: null },{ id: 'husun', name: '沪上阿姨', rank: null },{ id: 'lelecha', name: '乐乐茶', rank: null },{ id: 'peets', name: '皮爷咖啡', rank: null },{ id: 'mstand', name: 'M Stand', rank: null },{ id: 'manner', name: 'Manner', rank: null }];
+const BRANDS = [
+  { id: 'luckin', name: '瑞幸咖啡', rank: null },
+  { id: 'kudi', name: '库迪', rank: null },
+  { id: 'guming', name: '古茗', rank: null },
+  { id: 'molibaibai', name: '茉莉奶白', rank: null },
+  { id: 'chagi', name: '霸王茶姬', rank: null },
+  { id: 'xichi', name: '喜茶', rank: null },
+  { id: 'starbucks', name: '星巴克', rank: null },
+  { id: 'chabaidao', name: '茶百道', rank: null },
+  { id: 'naixue', name: '奈雪的茶', rank: null },
+  { id: 'coco', name: 'CoCo', rank: null },
+  { id: 'yeye', name: '爷爷不泡茶', rank: null },
+  { id: 'husun', name: '沪上阿姨', rank: null },
+  { id: 'lelecha', name: '乐乐茶', rank: null },
+  { id: 'peets', name: '皮爷咖啡', rank: null },
+  { id: 'mstand', name: 'M Stand', rank: null },
+  { id: 'manner', name: 'Manner', rank: null },
+];
 const DATA = {
   luckin: {
-    new: [
-      { title: '冰镇杨梅瑞纳冰', desc: '时令采摘东魁杨梅，24小时急速冷冻锁鲜，酸甜果肉混合细腻冰沙，夏日前奏', date: '昨日'},
-      { title: '自嘲熊和朋友们系列联名第二弹', desc: '指定双杯套餐得光栅卡挂件+双杯袋+杯套', date: '进行中'},
-    ],
-    hot: [
-      { title: '三大爆品回归转发抽奖', desc: '冰镇杨梅瑞纳冰/陨石拿铁/生椰拿铁，关+转揪10位送饮品券', date: '进行中'},
-    ],
+    new: [],
+    hot: []
   },
   kudi: {
-    new: [
-      { title: '阳光青提系列', desc: '阳光青提美式（玫瑰香气）+清爽芭乐提（绵密冰沙）', date: '进行中'},
-    ],
-    hot: [
-      { title: '超大杯畅饮季', desc: '杨幂代言，9.9元特惠专区部分饮品免费升级超大杯', date: '至4/30'},
-    ],
+    new: [],
+    hot: []
   },
   guming: {
-    new: [
-      { title: 'Pingu联名热卖中', desc: '冰咖小苹果（≈3.5颗苹果）、小苹果拿铁、苹果金凤梨，双杯套餐赠直饮杯盲盒', date: '4/16起'},
-    ],
-    hot: [
-      { title: '美团外卖生日礼', desc: '4月寿星免费喝香草籽维也纳或生椰拿铁', date: '进行中'},
-    ],
+    new: [],
+    hot: []
   },
   molibaibai: {
-    new: [
-      { title: '茉莉奶白新品', desc: '醒春之际，携手十个勤天·何浩楠/王一珩，以「种豆得豆」为题眼，探讨种豆发酵哲学，共同演绎「摩登茶咖」新品。关于生长、关于等待，时间已经给出答案，相信种豆，终会得豆。', date: '今日'},
-      { title: '茉莉奶白新品', desc: '4月21日10:00起，正式上线！SOE洪都拉斯酒桶发酵，首款咖啡系列', date: '今日'},
-    ],
-    hot: [
-      { title: '茉莉奶白动态', desc: '首批0元试饮官招募中，关注+转发抽10位送主理人周边', date: '今日'},
-    ],
+    new: [],
+    hot: []
   },
   chagi: {
-    new: [
-      { title: '走走系列持续热卖', desc: '海上雾奇兰/晴天罗勒桃/小森林柚子，三款茶特调+意境短片', date: '4/17'},
-    ],
-    hot: [
-      { title: '区域周边加码', desc: '4/20起各区域加码周边上线', date: '4/20' },
-    ],
+    new: [],
+    hot: []
   },
   xichi: {
-    new: [
-      { title: '喜茶新品', desc: '芭乐和莲雾真的绝配，清爽柔和！人气搭档，明日回归', date: '今日'},
-    ],
-    hot: [
-      { title: '喜茶动态', desc: 'Hello Kitty联名热度延续，樱花芭乐白桃持续热卖', date: '今日'},
-    ],
+    new: [],
+    hot: []
   },
   starbucks: {
-    new: [
-    ],
-    hot: [
-      { title: '世界地球日4/20-22', desc: '指定商品1件7折、2件65折，线下门店参与', date: '4/20-22'},
-      { title: '高蛋白拿铁PRO', desc: '20g原生乳蛋白/杯，0乳糖牛乳', date: '进行中'},
-      { title: 'STARBUCKS×LACOSTE联名', desc: '网球造型包挂及收纳袋', date: '进行中'},
-    ],
+    new: [],
+    hot: []
   },
-  chabado: {
-    new: [
-    ],
-    hot: [
-      { title: '崩坏：星穹铁道联名4/25开启', desc: '景元、爻光双角色，联名镭射票组+徽章套组', date: '4/25'},
-      { title: '美团×上新了故宫4/21起', desc: '联名胸针冰箱贴+香片挂饰，关注抽10位送联名周边', date: '今日'},
-    ],
+  chabaidao: {
+    new: [],
+    hot: []
   },
   naixue: {
-    new: [
-      { title: '纤果茶系列', desc: 'N种自然蔬果+低GI配方（羽衣甘蓝+苹果+橙子+柠檬）', date: '4/15'},
-    ],
-    hot: [
-      { title: '地球日×拟泥nini联名4/22上线', desc: '「把环保装进瓶子里，让爱循环生长」，抽20位送30元券', date: '4/22'},
-    ],
+    new: [],
+    hot: []
   },
   coco: {
-    new: [
-      { title: 'CoCo新品', desc: '神秘的饮品... 【🧱+🍎+👍】揪2位Co粉喝奶茶呦', date: '今日'},
-    ],
-    hot: [
-      { title: 'CoCo动态', desc: '青梅绿茶4/24约会邀请：「天气预报说会是个微风不燥的好天气」', date: '今日'},
-    ],
+    new: [],
+    hot: []
   },
   yeye: {
-    new: [
-    ],
-    hot: [
-      { title: '×Dinotaeng「葡萄熟了系列」', desc: '大溪地奶油葡萄，茉莉茶汤+三重葡萄风味+大溪地香草奶油', date: '进行中'},
-    ],
+    new: [],
+    hot: []
   },
-  ahs: {
-    new: [
-    ],
-    hot: [
-    ],
+  husun: {
+    new: [],
+    hot: []
   },
-  lele: {
-    new: [
-    ],
-    hot: [
-      { title: '×科大讯飞联名', desc: '「急招老板！这只虾不摸鱼」AI主题H5，3题趣味测试抽奶茶券/耳机/大疆', date: '进行中'},
-    ],
+  lelecha: {
+    new: [],
+    hot: []
   },
   peets: {
-    new: [
-      { title: '皮爷咖啡新品', desc: '你有没有闻到，从南国飘来的香气？寻味南方风土，捕捉当季鲜甜', date: '今日'},
-    ],
-    hot: [
-    ],
+    new: [],
+    hot: []
   },
   mstand: {
-    new: [
-    ],
-    hot: [
-            { title: 'M Stand动态', desc: '手机周边上新｜轻巧态度 融入日常', date: '今日' },
-            { title: 'M Stand动态', desc: '一起领略M Stand的美式复古风格', date: '今日' },
-            { title: 'M Stand动态', desc: 'M Stand 手机壳', date: '今日' },
-    ],
+    new: [],
+    hot: []
   },
   manner: {
-    new: [
-      { title: '×新西兰航空「抹茶芝士拿铁」', desc: '全国上新，清冽甘醇，套餐¥40含超大杯+航空周边', date: '4/19'},
-    ],
-    hot: [
-      { title: '芭乐冰美式', desc: '红心芭乐+气泡，清新爽口', date: '进行中'},
-    ],
+    new: [],
+    hot: []
   },
-};
-const HOT = [];
+};;
+const HOT = [];;
 let current = null;
 function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); document.body.style.overflow = ''; }
@@ -247,6 +201,6 @@ function render(id) {
 }
 function select(id) { current = id; renderBrandList(); render(id); }
 renderBrandList(); renderHot();
-</script>
+
 </body>
 </html>
