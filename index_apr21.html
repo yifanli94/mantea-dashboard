@@ -285,7 +285,7 @@ const HOT = [
 let current = null;
 function onDateChange(v) {
   const base = 'https://yifanli94.github.io/mantea-dashboard/';
-  if (v === '04.21') return;
+  if (v === '04.21') { window.location.href = window.location.pathname; return; }
   else if (v === 'apr20') window.location.href = base + 'index_apr20.html';
   else if (v === 'apr19') window.location.href = base + 'index_apr19.html';
   else if (v === 'apr18') window.location.href = base + 'index_apr18.html';
