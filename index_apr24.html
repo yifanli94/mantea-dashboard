@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>茶咖热点追踪看板 by 曼拾</title>
+  <title>茶咖热点追踪看板 by 曼拾 — 04.24</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root { --bg: #f0ece8; --surface: #faf9f7; --surface2: #f5f3f0; --border: #e0dbd5; --accent: #8b6fd4; --text: #2a2835; --text2: #6b6880; --text3: #9994a8; --new: #5eb8f3; --hot: #e8825e; --dim: #d4cfca; }
@@ -16,6 +16,11 @@
     .header-title { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -0.2px; white-space: nowrap; }
     .header-sub { font-size: 12px; color: var(--text3); padding-left: 10px; border-left: 1px solid var(--border); white-space: nowrap; }
     .header-spacer { flex: 1; }
+    .date-selector { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .date-selector label { font-size: 12px; color: var(--text3); white-space: nowrap; }
+    .date-selector select { font-size: 12px; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; cursor: pointer; outline: none; font-family: inherit; }
+    .date-selector select:focus { border-color: var(--accent); }
+    @media (max-width: 600px) { .date-selector label { display: none; } }
     .layout { display: grid; grid-template-columns: 200px 1fr 260px; height: calc(100vh - 52px); }
     .sidebar { border-right: 1px solid var(--border); overflow-y: auto; padding: 16px 0; position: relative; z-index: 150; }
     .sidebar-section { padding: 0 12px; margin-bottom: 8px; }
@@ -78,12 +83,6 @@
       .hot-list-desktop { display: none; }
     }
     @media (min-width: 769px) { .hot-list-mobile { display: none; } }
-
-    .date-select-wrap { position: relative; display: inline-flex; align-items: center; }
-    .date-select { appearance: none; -webkit-appearance: none; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 4px 28px 4px 10px; font-size: 12px; color: var(--text2); cursor: pointer; outline: none; }
-    .date-select-wrap::after { content: ''; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text3); pointer-events: none; }
-    .tag-live { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); background: var(--surface); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
-    .tag-live .dot { width: 5px; height: 5px; border-radius: 50%; background: #6ee7b7; }
   </style>
 </head>
 <body>
@@ -95,24 +94,11 @@
   <div class="header-title">茶咖热点追踪看板</div>
   <div class="header-sub">by 曼拾</div>
   <div class="header-spacer"></div>
-    
-  <div class="date-select-wrap">
-    <select class="date-select" id="dateSelect" onchange="onDateChange(this.value)">
-      <option value="apr22" selected>04.22（今日）</option>
-      <option value="apr21">04.21</option>
-      <option value="apr20">04.20</option>
-      <option value="apr19">04.19</option>
-      <option value="apr18">04.18</option>
-      <option value="apr17">04.17</option>
-      <option value="apr16">04.16</option>
-      <option value="apr9">04.09</option>
-      <option value="apr8">04.08</option>
-      <option value="apr7">04.07</option>
-    </select>
+  <div class="date-selector">
+    <label>日期</label>
+    <select id="dateSelect" onchange="onDateChange(this.value)"><option value="apr7">4/7</option><option value="apr8">4/8</option><option value="apr9">4/9</option><option value="apr16">4/16</option><option value="apr17">4/17</option><option value="apr18">4/18</option><option value="apr19">4/19</option><option value="apr20">4/20</option><option value="apr21">4/21</option><option value="apr22">4/22</option><option value="apr23">4/23</option></select>
   </div>
-  <div class="tag-live"><div class="dot"></div><span>实时更新</span></div>
-
-</header>
+    </header>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="layout">
   <nav class="sidebar" id="sidebar"><div class="sidebar-section"><div class="sidebar-label">品牌</div><div id="brandList"></div></div></nav>
@@ -138,167 +124,122 @@ const BRANDS = [
   { id: 'peets',    name: '皮爷咖啡',     rank: null },
   { id: 'mstand',   name: 'M Stand',     rank: null },
   { id: 'manner',   name: 'Manner',      rank: null },
-];
+]; 
 const DATA = {
   luckin: {
     new: [
-      { title: '冰镇杨梅瑞纳冰', desc: '时令采摘东魁杨梅，24小时急速冷冻锁鲜，酸甜果肉混合细腻冰沙，夏日前奏', date: '昨日'},
-      { title: '自嘲熊和朋友们系列联名第二弹', desc: '指定双杯套餐得光栅卡挂件+双杯袋+杯套', date: '进行中'},
+      { title: '蛋仔派对联动4/24开启', desc: '蛋小蓝店长身穿瑞幸咖啡店长联动外观，携假日柠檬茶代言人蛋小黄和蛋仔一起，送上假日悠闲好心情', date: '今日' },
+      { title: '全球品牌代言人易烊千玺', desc: '四时春好，光影新呈，和瑞幸一起喝，开启每天的幸运', date: '今日' },
     ],
-    hot: [
-      { title: '三大爆品回归转发抽奖', desc: '冰镇杨梅瑞纳冰/陨石拿铁/生椰拿铁，关+转揪10位送饮品券', date: '进行中'},
-    ],
+    hot: [],
   },
   kudi: {
     new: [
-      { title: '阳光青提系列', desc: '阳光青提美式（玫瑰香气）+清爽芭乐提（绵密冰沙）', date: '进行中'},
+      { title: '阳光玫瑰青提新品', desc: '阳光青提美式（云南等产区高品质大果，2300+小时日晒，自然清甜）、闽南红心芭乐（闽南火山岛产区，富硒火山岩土壤培育，芭乐果肉饱满）', date: '今日' },
     ],
     hot: [
-      { title: '超大杯畅饮季', desc: '杨幂代言，9.9元特惠专区部分饮品免费升级超大杯', date: '至4/30'},
+      { title: '《一人之下》联名', desc: '联名周边在售，潮玩系列先到先得；2026"苏超"镇江VS盐城门票抽奖进行中', date: '今日' },
     ],
   },
   guming: {
     new: [
-      { title: 'Pingu联名热卖中', desc: '冰咖小苹果（≈3.5颗苹果）、小苹果拿铁、苹果金凤梨，双杯套餐赠直饮杯盲盒', date: '4/16起'},
+      { title: '超A芝士葡萄4/23回归', desc: '八年经典人气爆品，1杯≈38颗葡萄，新鲜现剥时令葡萄，茉莉花茶×葡萄汁×芝士云顶', date: '昨日' },
     ],
     hot: [
-      { title: '美团外卖生日礼', desc: '4月寿星免费喝香草籽维也纳或生椰拿铁', date: '进行中'},
+      { title: 'Pingu联名热卖中', desc: '冰咖小苹果、小苹果拿铁、苹果金凤梨，双杯套餐赠直饮杯盲盒', date: '进行中' },
     ],
   },
   molibaibai: {
-    new: [
-      { title: '茉莉奶白新品', desc: '醒春之际，携手十个勤天·何浩楠/王一珩，以「种豆得豆」为题眼，探讨种豆发酵哲学，共同演绎「摩登茶咖」新品。关于生长、关于等待，时间已经给出答案，相信种豆，终会得豆。', date: '今日'},
-      { title: '茉莉奶白新品', desc: '4月21日10:00起，正式上线！SOE洪都拉斯酒桶发酵，首款咖啡系列', date: '今日'},
-    ],
+    new: [],
     hot: [
-      { title: '茉莉奶白动态', desc: '首批0元试饮官招募中，关注+转发抽10位送主理人周边', date: '今日'},
+      { title: '×美团×故宫联名', desc: '联名套餐派送，溯源故宫馆藏美学，联名香片挂饰', date: '进行中' },
+      { title: '×十个勤天联名福利', desc: '何浩楠/王一珩限量亲签照抽奖', date: '进行中' },
+      { title: '艺术家猜测互动', desc: '「建了一座春日花园」，猜猜联名艺术家是谁？5位得新品请喝', date: '今日' },
     ],
   },
   chagi: {
     new: [
-      { title: '走走系列持续热卖', desc: '海上雾奇兰/晴天罗勒桃/小森林柚子，三款茶特调+意境短片', date: '4/17'},
+      { title: '走走系列福贴彩色版4/24上线', desc: '樱花粉/嫩黄/暖橘调，在小程序生成我的福贴定制', date: '今日' },
     ],
     hot: [
-      { title: '区域周边加码', desc: '4/20起各区域加码周边上线', date: '4/20',
+      { title: '区域周边加码', desc: '4/20起各区域加码周边上线', date: '4/20' },
     ],
   },
   xichi: {
-    new: [
-      { title: '喜茶新品', desc: '芭乐和莲雾真的绝配，清爽柔和！人气搭档，明日回归', date: '今日'},
-    ],
-    hot: [
-      { title: '喜茶动态', desc: 'Hello Kitty联名热度延续，樱花芭乐白桃持续热卖', date: '今日'},
-    ],
+    new: [],
+    hot: [],
   },
   starbucks: {
-    new: [
-    ],
+    new: [],
     hot: [
-      { title: '世界地球日4/20-22', desc: '指定商品1件7折、2件65折，线下门店参与', date: '4/20-22'},
-      { title: '高蛋白拿铁PRO', desc: '20g原生乳蛋白/杯，0乳糖牛乳', date: '进行中'},
-      { title: 'STARBUCKS×LACOSTE联名', desc: '网球造型包挂及收纳袋', date: '进行中'},
+      { title: '世界地球日', desc: '4/20-4/22已结束，指定商品折扣活动完成', date: '4/22' },
     ],
   },
   chabado: {
-    new: [
-    ],
+    new: [],
     hot: [
-      { title: '崩坏：星穹铁道联名4/25开启', desc: '景元、爻光双角色，联名镭射票组+徽章套组', date: '4/25'},
-      { title: '美团×上新了故宫4/21起', desc: '联名胸针冰箱贴+香片挂饰，关注抽10位送联名周边', date: '今日'},
+      { title: '×崩坏：星穹铁道4/25开启', desc: '景元、爻光双角色，联名镭射票组+徽章套组+亚克力立牌文件袋，330+应援屏上线，关注+转发抽全套周边+648元现金', date: '4/25' },
+      { title: '×美团×故宫联名持续', desc: '联名胸针冰箱贴+香片挂饰', date: '进行中' },
     ],
   },
   naixue: {
-    new: [
-      { title: '纤果茶系列', desc: 'N种自然蔬果+低GI配方（羽衣甘蓝+苹果+橙子+柠檬）', date: '4/15'},
-    ],
+    new: [],
     hot: [
-      { title: '地球日×拟泥nini联名4/22上线', desc: '「把环保装进瓶子里，让爱循环生长」，抽20位送30元券', date: '4/22'},
+      { title: '×拟泥nini联名壁纸', desc: '和阿猪阿兔手牵手，一起守护地球，拿图点赞揪5位喝纤果茶', date: '今日' },
+      { title: '纤果茶系列直播', desc: '抖音官方专场直播4/24-26 9:00起，扫描二维码预约专享折扣', date: '今日' },
     ],
   },
   coco: {
-    new: [
-      { title: 'CoCo新品', desc: '神秘的饮品... 【🧱+🍎+👍】揪2位Co粉喝奶茶呦', date: '今日'},
-    ],
+    new: [],
     hot: [
-      { title: 'CoCo动态', desc: '青梅绿茶4/24约会邀请：「天气预报说会是个微风不燥的好天气」', date: '今日'},
+      { title: '×胜利女神联名今日开启', desc: '指挥官可前往全国活动门店购买桃乐丝、拉毗主题饮品', date: '今日' },
     ],
   },
   yeye: {
     new: [
+      { title: '葡萄熟了系列新品', desc: '乌日莫鲜奶酪葡萄（乌日莫鲜奶酪×葡萄汁×牛奶×武汉茉莉）', date: '10分钟前' },
     ],
     hot: [
-      { title: '×Dinotaeng「葡萄熟了系列」', desc: '大溪地奶油葡萄，茉莉茶汤+三重葡萄风味+大溪地香草奶油', date: '进行中'},
+      { title: '×Dinotaeng联名', desc: '大溪地奶油葡萄，茉莉茶汤+三重葡萄风味+大溪地香草奶油', date: '进行中' },
+      { title: '×杭州博物馆联名', desc: '元·影青釉里红高足瓷杯粉绿限定色，文物联名', date: '进行中' },
     ],
   },
   ahs: {
-    new: [
-    ],
-    hot: [
-    ],
+    new: [],
+    hot: [],
   },
   lele: {
-    new: [
-    ],
-    hot: [
-      { title: '×科大讯飞联名', desc: '「急招老板！这只虾不摸鱼」AI主题H5，3题趣味测试抽奶茶券/耳机/大疆', date: '进行中'},
-    ],
+    new: [],
+    hot: [],
   },
   peets: {
     new: [
-      { title: '皮爷咖啡新品', desc: '你有没有闻到，从南国飘来的香气？寻味南方风土，捕捉当季鲜甜', date: '今日'},
+      { title: '全新瑰夏挂耳咖啡登场', desc: '寻味两大核心产区品鉴双重风土；巴拿马波奎特·莱里达庄园火山土壤+高海拔微气候，水洗工艺释放灵动花香', date: '今日' },
     ],
-    hot: [
-    ],
+    hot: [],
   },
   mstand: {
-    new: [
-    ],
-    hot: [
-            { title: 'M Stand动态', desc: '手机周边上新｜轻巧态度 融入日常', date: '今日' },
-            { title: 'M Stand动态', desc: '一起领略M Stand的美式复古风格', date: '今日' },
-            { title: 'M Stand动态', desc: 'M Stand 手机壳', date: '今日' },
-    ],
+    new: [],
+    hot: [],
   },
   manner: {
-    new: [
-      { title: '×新西兰航空「抹茶芝士拿铁」', desc: '全国上新，清冽甘醇，套餐¥40含超大杯+航空周边', date: '4/19'},
-    ],
-    hot: [
-      { title: '芭乐冰美式', desc: '红心芭乐+气泡，清新爽口', date: '进行中'},
-    ],
+    new: [],
+    hot: [],
   },
 };
 const HOT = [
-  {rank:1,name:'茉莉奶白',tag:'🆕',desc:'首款咖啡系列正式上线！SOE洪都拉斯酒桶发酵'},
-  {rank:2,name:'喜茶',tag:'🆕',desc:'芭乐莲雾明日回归，清爽柔和'},
-  {rank:3,name:'CoCo',tag:'🆕',desc:'青梅新品今日发布，14分钟前'},
-  {rank:4,name:'瑞幸咖啡',tag:'🆕',desc:'冰镇杨梅瑞纳冰回归 + 自嘲熊联名第二弹'},
-  {rank:5,name:'古茗',tag:'🆕',desc:'Pingu联名热卖中，苹果系列'},
-  {rank:6,name:'茶百道',tag:'🎀',desc:'美团×故宫联名4/21起+崩坏星穹铁道4/25'},
+  {rank:1,name:'爷爷不泡茶',tag:'🆕',desc:'葡萄熟了系列新品今日发布，乌日莫鲜奶酪×葡萄汁×茉莉',bar:98},
+  {rank:2,name:'瑞幸咖啡',tag:'🆕',desc:'蛋仔派对联动4/24开启+易烊千玺全球品牌代言人',bar:90},
+  {rank:3,name:'库迪',tag:'🆕',desc:'阳光玫瑰青提+闽南红心芭乐双新品，异人联动持续',bar:85},
+  {rank:4,name:'CoCo',tag:'🆕',desc:'×胜利女神新的希望联名今日浪漫开启',bar:80},
+  {rank:5,name:'霸王茶姬',tag:'🎀',desc:'走走系列主题福贴彩色版4/24小程序上线',bar:75},
+  {rank:6,name:'茶百道',tag:'🎀',desc:'×崩坏星穹铁道4/25开启，330+应援屏上线，抽648元现金',bar:70},
 ];
 let current = null;
 function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); document.body.style.overflow = ''; }
 document.getElementById('menuBtn').addEventListener('click', openMenu);
 document.getElementById('sidebarOverlay').addEventListener('click', closeMenu);
-
-const DATE_LABEL = "CURRENT_DATE";
-function onDateChange(v) {
-  const base = 'https://yifanli94.github.io/mantea-dashboard/';
-  if (v === 'apr24') { window.location.href = base + 'index_apr24.html'; return; }
-  else if (v === 'apr23') { window.location.href = base + 'index_apr23.html'; return; }
-  else if (v === 'apr22') { window.location.href = base + 'index_apr22.html'; return; }
-  else if (v === 'apr21') { window.location.href = base + 'index_apr21.html'; return; }
-  else if (v === 'apr20') { window.location.href = base + 'index_apr20.html'; return; }
-  else if (v === 'apr19') { window.location.href = base + 'index_apr19.html'; return; }
-  else if (v === 'apr18') { window.location.href = base + 'index_apr18.html'; return; }
-  else if (v === 'apr17') { window.location.href = base + 'index_apr17.html'; return; }
-  else if (v === 'apr16') { window.location.href = base + 'index_apr16.html'; return; }
-  else if (v === 'apr9') { window.location.href = base + 'index_apr9.html'; return; }
-  else if (v === 'apr8') { window.location.href = base + 'index_apr8.html'; return; }
-  else if (v === 'apr7') { window.location.href = base + 'index_apr7.html'; return; }
-}
-
 function renderBrandList() { document.getElementById('brandList').innerHTML = BRANDS.map(b => `<div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')"><span class="brand-name">${b.name}</span>${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}</div>`).join(''); }
 function renderHot() { document.getElementById('hotList').innerHTML = HOT.map(h => `<div class="hot-item"><div class="hot-rank">#${h.rank}</div><div class="hot-info"><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div><div class="hot-bar"><div class="hot-bar-fill" style="width:${h.bar}%"></div></div></div></div>`).join(''); document.getElementById('hotListMobile').innerHTML = HOT.map(h => `<div class="hot-card"><div class="hot-rank">#${h.rank}</div><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div></div>`).join(''); }
 function render(id) {
@@ -312,6 +253,21 @@ function render(id) {
 }
 function select(id) { current = id; renderBrandList(); render(id); }
 renderBrandList(); renderHot();
+function onDateChange(v) {
+  const base = 'https://yifanli94.github.io/mantea-dashboard/';
+  if (v === 'apr23') { window.location.href = base + 'index_apr23.html'; return; }
+  else if (v === 'apr23') window.location.href = base + 'index_apr23.html';
+  else if (v === 'apr22') window.location.href = base + 'index_apr22.html';
+  else if (v === 'apr21') window.location.href = base + 'index_apr21.html';
+  else if (v === 'apr20') window.location.href = base + 'index_apr20.html';
+  else if (v === 'apr19') window.location.href = base + 'index_apr19.html';
+  else if (v === 'apr18') window.location.href = base + 'index_apr18.html';
+  else if (v === 'apr17') window.location.href = base + 'index_apr17.html';
+  else if (v === 'apr16') window.location.href = base + 'index_apr16.html';
+  else if (v === 'apr9') window.location.href = base + 'index_apr9.html';
+  else if (v === 'apr8') window.location.href = base + 'index_apr8.html';
+  else if (v === 'apr7') window.location.href = base + 'index_apr7.html';
+}
 </script>
 </body>
 </html>
