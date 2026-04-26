@@ -59,6 +59,8 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
     .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 140; }
+    .lost-notice { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; color: var(--text3); font-size: 13px; line-height: 1.8; }
+    .lost-notice strong { color: var(--text2); }
     @media (max-width: 1100px) { .right { display: none; } .cards { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 768px) {
       .menu-btn { display: flex; align-items: center; justify-content: center; }
@@ -94,7 +96,7 @@
   <div class="header-spacer"></div>
   <div class="date-selector">
     <label>日期</label>
-    <select id="dateSelect" onchange="onDateChange(this.value)"><option value="apr26" selected>4/26（今日）</option><option value="apr25">4/25</option><option value="apr24">4/24</option><option value="apr23">4/23</option><option value="apr22">4/22</option><option value="apr21">4/21</option><option value="apr20">4/20</option><option value="apr19">4/19</option><option value="apr18">4/18</option><option value="apr17">4/17</option><option value="apr16">4/16</option></select>
+    <select id="dateSelect" onchange="onDateChange(this.value)"><option value="apr7">4/7</option><option value="apr8">4/8</option><option value="apr9">4/9</option><option value="apr16">4/16</option><option value="apr17">4/17</option><option value="apr18">4/18</option><option value="apr19">4/19</option><option value="apr20">4/20</option><option value="apr21">4/21</option><option value="apr22">4/22</option><option value="apr23">4/23</option></select>
   </div>
     </header>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -126,129 +128,139 @@ const BRANDS = [
 const DATA = {
   luckin: {
     new: [
-      { title: '瑞幸酸奶昔系列尝鲜', desc: '牛油果羽衣酸奶昔+瓦尔登蓝芒果酸奶昔，限时早鸟价4/25-4/26，4/27门店正式上新', date: '今日' },
-      { title: '蛋仔派对联动持续', desc: '「柠好柠好，幸会蛋仔假日企划」，蛋小蓝店长外观+动作，APP/小程序参与', date: '进行中' },
+      { title: '冰镇杨梅瑞纳冰', desc: '时令采摘东魁杨梅，24小时急速冷冻锁鲜，酸甜果肉混合细腻冰沙，夏日前奏', date: '昨日'},
+      { title: '自嘲熊和朋友们系列联名第二弹', desc: '指定双杯套餐得光栅卡挂件+双杯袋+杯套', date: '进行中'},
     ],
     hot: [
-      { title: '全球品牌代言人刘亦菲', desc: '「春日和煦，美学焕新」，和瑞幸一起喝，开启每天的幸运', date: '进行中' },
+      { title: '三大爆品回归转发抽奖', desc: '冰镇杨梅瑞纳冰/陨石拿铁/生椰拿铁，关+转揪10位送饮品券', date: '进行中'},
     ],
   },
   kudi: {
     new: [
-      { title: '苏见信巡回演唱会佛山站', desc: '库迪作为官方特邀赞助商，全程见证咖香与音浪碰撞', date: '今日' },
+      { title: '阳光青提系列', desc: '阳光青提美式（玫瑰香气）+清爽芭乐提（绵密冰沙）', date: '进行中'},
     ],
     hot: [
-      { title: '异人春光红包封面', desc: '公众号回复【3.9元喝库迪】扫码领取，数量有限', date: '进行中' },
+      { title: '超大杯畅饮季', desc: '杨幂代言，9.9元特惠专区部分饮品免费升级超大杯', date: '至4/30'},
     ],
   },
   guming: {
     new: [
+      { title: 'Pingu联名热卖中', desc: '冰咖小苹果（≈3.5颗苹果）、小苹果拿铁、苹果金凤梨，双杯套餐赠直饮杯盲盒', date: '4/16起'},
     ],
     hot: [
-      { title: '超A芝士葡萄已回归', desc: '4/23 10:00回归，果茶销冠第八年，1杯≈38颗葡萄', date: '进行中' },
+      { title: '美团外卖生日礼', desc: '4月寿星免费喝香草籽维也纳或生椰拿铁', date: '进行中'},
     ],
   },
   molibaibai: {
     new: [
-      { title: '×INSTINCTOY「醒春梦乐园」联名', desc: '转发+关注抽10位请喝新品，潮玩艺术家大久保操刀，甜美与先锋并存', date: '今日' },
+      { title: '茉莉奶白新品', desc: '醒春之际，携手十个勤天·何浩楠/王一珩，以「种豆得豆」为题眼，探讨种豆发酵哲学，共同演绎「摩登茶咖」新品。关于生长、关于等待，时间已经给出答案，相信种豆，终会得豆。', date: '今日'},
+      { title: '茉莉奶白新品', desc: '4月21日10:00起，正式上线！SOE洪都拉斯酒桶发酵，首款咖啡系列', date: '今日'},
     ],
     hot: [
+      { title: '茉莉奶白动态', desc: '首批0元试饮官招募中，关注+转发抽10位送主理人周边', date: '今日'},
     ],
   },
   chagi: {
     new: [
-      { title: '「出去走走」壁纸周末版', desc: '换上彩色版福贴，周末一起到阳光里去，评论区征集粉丝投稿', date: '今日' },
+      { title: '走走系列持续热卖', desc: '海上雾奇兰/晴天罗勒桃/小森林柚子，三款茶特调+意境短片', date: '4/17'},
     ],
     hot: [
+      { title: '区域周边加码', desc: '4/20起各区域加码周边上线', date: '4/20' },
     ],
   },
   xichi: {
     new: [
-      { title: '凤梨酥单颗装', desc: '2.3斤徐闻菠萝熬成1斤馅，真实果肉纤维，酥皮融入茉莉绿妍，清爽不腻', date: '今日' },
+      { title: '喜茶新品', desc: '芭乐和莲雾真的绝配，清爽柔和！人气搭档，明日回归', date: '今日'},
     ],
     hot: [
+      { title: '喜茶动态', desc: 'Hello Kitty联名热度延续，樱花芭乐白桃持续热卖', date: '今日'},
     ],
   },
   starbucks: {
     new: [
-      { title: '星巴克鸳鸯系列全新上市', desc: '抹茶鸳鸯（千目抹茶×浓缩咖啡，龙井43茶树鲜叶精研），茶与咖浓郁交锋', date: '今日' },
     ],
     hot: [
+      { title: '世界地球日4/20-22', desc: '指定商品1件7折、2件65折，线下门店参与', date: '4/20-22'},
+      { title: '高蛋白拿铁PRO', desc: '20g原生乳蛋白/杯，0乳糖牛乳', date: '进行中'},
+      { title: 'STARBUCKS×LACOSTE联名', desc: '网球造型包挂及收纳袋', date: '进行中'},
     ],
   },
   chabado: {
     new: [
-      { title: '×《崩坏：星穹铁道》联名4/25开启', desc: '景元、爻光双角色，6款联名套餐，联名镭射票组+徽章套组+亚克力陪伴夹，关注+转抽3位送全套周边+648元现金；36家主题门店+330+块应援屏同步', date: '今日10:00' },
     ],
     hot: [
+      { title: '崩坏：星穹铁道联名4/25开启', desc: '景元、爻光双角色，联名镭射票组+徽章套组', date: '4/25'},
+      { title: '美团×上新了故宫4/21起', desc: '联名胸针冰箱贴+香片挂饰，关注抽10位送联名周边', date: '今日'},
     ],
   },
   naixue: {
     new: [
-      { title: '巨霸气茉莉玉油柑1L盒马限定', desc: '3秒微涩5秒回甘，黄金产区重塑经典，大容量超适合周末聚会，评论区揪10位送饮', date: '今日' },
+      { title: '纤果茶系列', desc: 'N种自然蔬果+低GI配方（羽衣甘蓝+苹果+橙子+柠檬）', date: '4/15'},
     ],
     hot: [
+      { title: '地球日×拟泥nini联名4/22上线', desc: '「把环保装进瓶子里，让爱循环生长」，抽20位送30元券', date: '4/22'},
     ],
   },
   coco: {
     new: [
-      { title: '青梅泡泡', desc: '山野青梅+气泡，酸甜凉意，×《胜利女神：新的希望》联动持续，指挥官联名套餐在售', date: '今日' },
+      { title: 'CoCo新品', desc: '神秘的饮品... 【🧱+🍎+👍】揪2位Co粉喝奶茶呦', date: '今日'},
     ],
     hot: [
+      { title: 'CoCo动态', desc: '青梅绿茶4/24约会邀请：「天气预报说会是个微风不燥的好天气」', date: '今日'},
     ],
   },
   yeye: {
     new: [
-      { title: '葡萄熟了系列全国上新', desc: '乌日莫鲜奶酪葡萄（乌日莫鲜奶酪×葡萄汁×牛奶×武汉茉莉），葡萄抢鲜入夏', date: '今日' },
     ],
     hot: [
-      { title: '广东200店庆', desc: '4/24-4/26买一送一，4/27-4/30第②杯半价', date: '进行中' },
-      { title: '×Dinotaeng联名周边', desc: '关注+转赞评揪5位得呆萌町联名礼盒', date: '进行中' },
-      { title: '×湖北省博物馆联名', desc: '「元气好礼」5份（文创礼盒+元气蛋兑换券）', date: '进行中' },
+      { title: '×Dinotaeng「葡萄熟了系列」', desc: '大溪地奶油葡萄，茉莉茶汤+三重葡萄风味+大溪地香草奶油', date: '进行中'},
     ],
   },
   ahs: {
     new: [
-      { title: '东魁杨梅爆多肉', desc: '甄选云南高海拔东魁杨梅，单果克重≈14g，搭配杨梅果肉绵密果浆与Q弹晶球', date: '今日' },
     ],
     hot: [
     ],
   },
   lele: {
     new: [
-      { title: '杨梅荔枝四果冰', desc: '灵感源自闽南经典四果冰，海石花条+阿达子+酒酿搭配杨梅，爽滑清甜，今日买1送1', date: '今日' },
     ],
     hot: [
+      { title: '×科大讯飞联名', desc: '「急招老板！这只虾不摸鱼」AI主题H5，3题趣味测试抽奶茶券/耳机/大疆', date: '进行中'},
     ],
   },
   peets: {
     new: [
+      { title: '皮爷咖啡新品', desc: '你有没有闻到，从南国飘来的香气？寻味南方风土，捕捉当季鲜甜', date: '今日'},
     ],
     hot: [
-      { title: '瑰夏挂耳咖啡', desc: '寻味两大核心产区，巴拿马波奎特·莱里达庄园火山土壤+高海拔微气候', date: '持续' },
     ],
   },
   mstand: {
     new: [
     ],
     hot: [
+            { title: 'M Stand动态', desc: '手机周边上新｜轻巧态度 融入日常', date: '今日' },
+            { title: 'M Stand动态', desc: '一起领略M Stand的美式复古风格', date: '今日' },
+            { title: 'M Stand动态', desc: 'M Stand 手机壳', date: '今日' },
     ],
   },
   manner: {
     new: [
+      { title: '×新西兰航空「抹茶芝士拿铁」', desc: '全国上新，清冽甘醇，套餐¥40含超大杯+航空周边', date: '4/19'},
     ],
     hot: [
-      { title: '新西兰航空联名', desc: '抹茶芝士拿铁，清冽甘醇，套餐¥40含超大杯+航空周边', date: '持续' },
+      { title: '芭乐冰美式', desc: '红心芭乐+气泡，清新爽口', date: '进行中'},
     ],
   },
 };
 const HOT = [
-  {rank:1,name:'茶百道',tag:'🆕',desc:'×崩坏星穹铁道联名今日10:00开启，景元爻光双角色'},
-  {rank:2,name:'爷爷不泡茶',tag:'🆕',desc:'葡萄熟了系列全国上新，广东200店庆买一送一'},
-  {rank:3,name:'瑞幸咖啡',tag:'🆕',desc:'酸奶昔系列今日尝鲜，蛋仔派对联动持续'},
-  {rank:4,name:'星巴克',tag:'🆕',desc:'鸳鸯系列全新上市，茶咖浓郁交锋'},
-  {rank:5,name:'茉莉奶白',tag:'🎀',desc:'×INSTINCTOY「醒春梦乐园」联名今日开启'},
-  {rank:6,name:'奈雪的茶',tag:'🆕',desc:'巨霸气茉莉玉油柑1L盒马限定回归'},
+  {rank:1,name:'茉莉奶白',tag:'🆕',desc:'首款咖啡系列正式上线！SOE洪都拉斯酒桶发酵'},
+  {rank:2,name:'喜茶',tag:'🆕',desc:'芭乐莲雾明日回归，清爽柔和'},
+  {rank:3,name:'CoCo',tag:'🆕',desc:'青梅新品今日发布，14分钟前'},
+  {rank:4,name:'瑞幸咖啡',tag:'🆕',desc:'冰镇杨梅瑞纳冰回归 + 自嘲熊联名第二弹'},
+  {rank:5,name:'古茗',tag:'🆕',desc:'Pingu联名热卖中，苹果系列'},
+  {rank:6,name:'茶百道',tag:'🎀',desc:'美团×故宫联名4/21起+崩坏星穹铁道4/25'},
 ];
 let current = null;
 function openMenu() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -256,13 +268,13 @@ function closeMenu() { document.getElementById('sidebar').classList.remove('open
 document.getElementById('menuBtn').addEventListener('click', openMenu);
 document.getElementById('sidebarOverlay').addEventListener('click', closeMenu);
 function renderBrandList() { document.getElementById('brandList').innerHTML = BRANDS.map(b => `<div class="brand-item${b.id === current ? ' active' : ''}" onclick="select('${b.id}')"><span class="brand-name">${b.name}</span>${b.rank ? `<span class="brand-rank">#${b.rank}</span>` : ''}</div>`).join(''); }
-function renderHot() { document.getElementById('hotList').innerHTML = HOT.map(h => `<div class="hot-item"><div class="hot-rank">#${h.rank}</div><div class="hot-info"><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag} ${h.desc}</div></div></div>`).join(''); document.getElementById('hotListMobile').innerHTML = HOT.map(h => `<div class="hot-card"><div class="hot-rank">#${h.rank}</div><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag} ${h.desc}</div></div>`).join(''); }
+function renderHot() { document.getElementById('hotList').innerHTML = HOT.map(h => `<div class="hot-item"><div class="hot-rank">#${h.rank}</div><div class="hot-info"><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div><div class="hot-bar"><div class="hot-bar-fill" style="width:${h.bar}%"></div></div></div></div>`).join(''); document.getElementById('hotListMobile').innerHTML = HOT.map(h => `<div class="hot-card"><div class="hot-rank">#${h.rank}</div><div class="hot-brand">${h.name}</div><div class="hot-tag">${h.tag}</div></div>`).join(''); }
 function render(id) {
   const d = DATA[id]; if (!d) return;
   const brand = BRANDS.find(b => b.id === id);
   let html = `<div class="brand-welcome"><h2>${brand.name}</h2></div>`;
-  if (d.new && d.new.length) { html += `<div class="section"><div class="section-head"><div class="section-title">🆕 新品上市</div><div class="section-line"></div></div><div class="cards">${d.new.map(item => `<div class="card"><span class="card-badge new">new</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
-  if (d.hot && d.hot.length) { html += `<div class="section"><div class="section-head"><div class="section-title">营销 · 联名</div><div class="section-line"></div></div><div class="cards">${d.hot.map(item => `<div class="card"><span class="card-badge hot">hot</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
+  if (d.new && d.new.length) { html += `<div class="section"><div class="section-head"><div class="section-title">🆕 新品上市</div><div class="section-line"></div><div class="section-count">${d.new.length}</div></div><div class="cards">${d.new.map(item => `<div class="card"><span class="card-badge new">new</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
+  if (d.hot && d.hot.length) { html += `<div class="section"><div class="section-head"><div class="section-title">IP联名 · 营销</div><div class="section-line"></div><div class="section-count">${d.hot.length}</div></div><div class="cards">${d.hot.map(item => `<div class="card"><span class="card-badge hot">hot</span><h4>${item.title}</h4><p>${item.desc}</p><div class="date">${item.date}</div></div>`).join('')}</div></div>`; }
   document.getElementById('mainContent').innerHTML = html;
   if (window.innerWidth <= 768) closeMenu();
 }
@@ -270,10 +282,7 @@ function select(id) { current = id; renderBrandList(); render(id); }
 renderBrandList(); renderHot();
 function onDateChange(v) {
   const base = 'https://yifanli94.github.io/mantea-dashboard/';
-  if (v === 'apr26') { window.location.href = window.location.pathname; return; }
-  else if (v === 'apr25') window.location.href = base + 'index_apr25.html';
-  else if (v === 'apr24') window.location.href = base + 'index_apr24.html';
-  else if (v === 'apr23') window.location.href = base + 'index_apr23.html';
+  if (v === 'apr23') { window.location.href = window.location.pathname; return; }
   else if (v === 'apr22') window.location.href = base + 'index_apr22.html';
   else if (v === 'apr21') window.location.href = base + 'index_apr21.html';
   else if (v === 'apr20') window.location.href = base + 'index_apr20.html';
@@ -281,6 +290,9 @@ function onDateChange(v) {
   else if (v === 'apr18') window.location.href = base + 'index_apr18.html';
   else if (v === 'apr17') window.location.href = base + 'index_apr17.html';
   else if (v === 'apr16') window.location.href = base + 'index_apr16.html';
+  else if (v === 'apr9') window.location.href = base + 'index_apr9.html';
+  else if (v === 'apr8') window.location.href = base + 'index_apr8.html';
+  else if (v === 'apr7') window.location.href = base + 'index_apr7.html';
 }
 </script>
 </body>
